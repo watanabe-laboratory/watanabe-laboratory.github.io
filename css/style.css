@@ -1,0 +1,41 @@
+html, body
+{
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+}
+
+
+article,aside,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section,main {
+        display:block;
+}
+
+body { padding-bottom: 40px;}
+
+
+header[role="banner"] h1{
+  margin: 0;
+  padding: 0;
+}
+
+header[role="banner"]{
+  margin: 0;
+  padding: 0 0 1em 0;
+  background: linear-gradient(#005C92 90%, #FFFFFF);
+  width: 100%;
+}
+
+
+h2:after {
+  content: "";
+  display: block;
+  height: 2px;
+  width:100%;
+  background-image: linear-gradient(to right, #005C92 90%, #FFFFFF);
+}
+
