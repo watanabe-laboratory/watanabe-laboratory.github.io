@@ -19,6 +19,7 @@ body { font-family: sans-serif; line-height: 150%; padding-bottom: 40px;}
 
 header[role="banner"]{
   margin: 0;
+  margin-bottom: 5em;
   padding: 1em 0em 1em 0em;
   background-color: rgb(51, 51, 51);
   width: 100%;
@@ -46,13 +47,24 @@ h2:after {
 }
 */
 
-main {
-  padding: 40px 60px;
-  margin: auto;
-  max-width: 1260px;
+#container {
+  text-align: center;
 }
 
-#menu { clear:left; width: 200px; float: right;}
+main {
+  max-width: 1240px;
+  min-width: 750px;
+  display: inline-block;
+  text-align: left;
+}
+
+aside ul {
+  margin: 0;
+  padding: 0;
+}
+
+aside {display: inline-block; width: 200px; }
+#menu { position: absolute; margin-left: 2em;}
 #menu li { list-style: none; margin-bottom: 2em; }
 #menu a { font-weight: bold; color: rgb(51, 51, 51); text-decoration: none; }
 #menu a:hover { font-weight: bold; color: rgb(51, 51, 51); text-decoration: underline; }
