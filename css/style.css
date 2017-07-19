@@ -19,7 +19,6 @@ body { font-family: sans-serif; line-height: 150%; padding-bottom: 40px;}
 
 header[role="banner"]{
   margin: 0;
-  margin-bottom: 5em;
   padding: 1em 0em 1em 0em;
   background-color: rgb(51, 51, 51);
   width: 100%;
@@ -47,35 +46,45 @@ h2:after {
 }
 */
 
-#container {
-  text-align: center;
-}
-
 main {
   max-width: 1240px;
   min-width: 750px;
-  display: inline-block;
-  position: relative;
-  text-align: left;
-}
-
-main:after {
-  content: "This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message.";
-  overflow: hidden;
   display: block;
-  height: 0;
+  margin: 0 auto;
 }
 
-aside ul {
-  margin: 0;
+
+nav {
+  padding: 1em 0 2em 0;
+  border-bottom: 1px black solid;
+  width: 100%;
+  font-weight: bold;
+  font-size: 120%;
+}
+
+nav ul {
+  width: 750px;
+  margin: 0 auto;
   padding: 0;
+  list-style: none;
+  position: relative;
 }
 
-#menu { position: relative; display: inline-block; margin-left: 2em; width: 200px; left: -200px; vertical-align: top;}
-#menu li { list-style: none; margin-bottom: 2em; }
-#menu a { font-weight: bold; color: rgb(51, 51, 51); text-decoration: none; }
-#menu a:hover { font-weight: bold; color: rgb(51, 51, 51); text-decoration: underline; }
+nav ul li {
+  float: left;
+  position: relative;
+  width: 150px;
+  margin: 0;
+  text-align: center;
+}
 
+nav ul a { color: rgb(51, 51, 51); text-decoration: none; display: block; }
+
+nav ul ul { display: none; position: absolute; top: 100%; left: 0; background: white; padding 0; width: 300px; padding-top:1em; border: 2px black solid; padding-left: 10px; }
+nav ul ul li { float: none; width: 300px; line-height: 40px; text-align: left; }
+nav ul li:hover > ul { display: block; }
+
+nav ul li:hover { background: rgb(200, 200, 200); }
 
 h1 {
   color: rgb(51, 51, 153);
