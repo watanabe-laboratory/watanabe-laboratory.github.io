@@ -55,7 +55,15 @@ main {
   max-width: 1240px;
   min-width: 750px;
   display: inline-block;
+  position: relative;
   text-align: left;
+}
+
+main:after {
+  content: "This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message. This is a hidden message.";
+  overflow: hidden;
+  display: block;
+  height: 0;
 }
 
 aside ul {
@@ -63,8 +71,7 @@ aside ul {
   padding: 0;
 }
 
-aside {display: inline-block; width: 200px; }
-#menu { position: absolute; margin-left: 2em;}
+#menu { position: relative; display: inline-block; margin-left: 2em; width: 200px; left: -200px; vertical-align: top;}
 #menu li { list-style: none; margin-bottom: 2em; }
 #menu a { font-weight: bold; color: rgb(51, 51, 51); text-decoration: none; }
 #menu a:hover { font-weight: bold; color: rgb(51, 51, 51); text-decoration: underline; }
