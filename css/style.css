@@ -15,22 +15,28 @@ footer,header,hgroup,menu,nav,section,main {
         display:block;
 }
 
-body { padding-bottom: 40px;}
+body { font-family: sans-serif; line-height: 150%; padding-bottom: 40px;}
 
+header[role="banner"]{
+  margin: 0;
+  padding: 1em 0em 1em 0em;
+  background-color: rgb(51, 51, 51);
+  width: 100%;
+}
 
 header[role="banner"] h1{
   margin: 0;
   padding: 0;
+  text-align: center;
 }
 
-header[role="banner"]{
-  margin: 0;
-  padding: 0 0 1em 0;
-  background: linear-gradient(#005C92 90%, #FFFFFF);
-  width: 100%;
+header[role="banner"] h1 a {
+  color: white;
+  text-decoration: none;
 }
 
 
+/*
 h2:after {
   content: "";
   display: block;
@@ -38,4 +44,20 @@ h2:after {
   width:100%;
   background-image: linear-gradient(to right, #005C92 90%, #FFFFFF);
 }
+*/
 
+main {
+  padding: 40px 60px;
+  margin: auto;
+  max-width: 1260px;
+}
+
+#menu { clear:left; width: 200px; float: right;}
+#menu li { list-style: none; margin-bottom: 2em; }
+#menu a { font-weight: bold; color: rgb(51, 51, 51); text-decoration: none; }
+#menu a:hover { font-weight: bold; color: rgb(51, 51, 51); text-decoration: underline; }
+
+
+h1 {
+  color: rgb(51, 51, 153);
+}
