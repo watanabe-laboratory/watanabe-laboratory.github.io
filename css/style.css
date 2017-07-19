@@ -55,7 +55,10 @@ main {
 
 
 nav {
+/*
   padding: 1em 0 2em 0;
+*/
+  height: 3em;
   border-bottom: 1px black solid;
   width: 100%;
   font-weight: bold;
@@ -76,12 +79,13 @@ nav ul li {
   width: 150px;
   margin: 0;
   text-align: center;
+  padding: 1em 0 .9em 0;
 }
 
 nav ul a { color: rgb(51, 51, 51); text-decoration: none; display: block; }
 
-nav ul ul { display: none; position: absolute; top: 100%; left: 0; background: white; padding 0; width: 300px; padding-top:1em; border: 2px black solid; padding-left: 10px; }
-nav ul ul li { float: none; width: 300px; line-height: 40px; text-align: left; }
+nav ul ul { display: none; position: absolute; top: 100%; left: 0; background: white; padding 0; width: 300px; padding-top:1em; border: 2px black solid; }
+nav ul ul li { float: none; width: 290px; line-height: 40px; text-align: left; padding-left: 10px; }
 nav ul li:hover > ul { display: block; }
 
 nav ul li:hover { background: rgb(200, 200, 200); }
