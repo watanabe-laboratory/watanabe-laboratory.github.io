@@ -15,7 +15,7 @@ title: 渡辺研究室
 * 計算の限界を見究める
 * 様々な現象を計算という視点で分析する
 
-といった研究をしています （もう少し詳しい説明は ⇒ Research Topics）． ただし，．．．研究室には
+といった研究をしています （もう少し詳しい説明は ⇒ [主要な研究テーマ](./research_theme.html)）． ただし，．．．研究室には
 
 <span style="font-size:150%; background-color: rgb(204, 204, 204); border: 1px solid black;">研究テーマは自ら苦労して求めるべし！</span>
 

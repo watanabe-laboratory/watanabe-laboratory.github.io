@@ -36,15 +36,14 @@ header[role="banner"] h1 a {
 }
 
 
-/*
-h2:after {
-  content: "";
-  display: block;
-  height: 2px;
-  width:100%;
-  background-image: linear-gradient(to right, #005C92 90%, #FFFFFF);
+h2 {
+  border-width: 1px 1px 1px 8px;
+  border-style: solid;
+  border-color: rgb(51, 51, 51);
+  padding: 4px 4px 4px 10px;
+  border-image: none;
+  background-color: rgb(204, 204, 204);
 }
-*/
 
 main {
   max-width: 1240px;
@@ -81,9 +80,13 @@ nav ul li {
 
 nav ul a { color: rgb(51, 51, 51); text-decoration: none; display: block; }
 
-nav ul ul { display: none; position: absolute; top: 100%; right: 0; background: white; padding 0; width: 300px; padding-top:1em; border: 2px black solid; }
-nav ul ul li { float: none; width: 290px; line-height: 40px; text-align: left; padding-left: 10px; }
-nav ul li:hover > ul { display: block; }
+#research ul { display: none; position: absolute; top: 100%; right: -25px; background: white; padding 0; width: 200px; padding-top:1em; border: 2px black solid; }
+#research ul li { float: none; width: 190px; line-height: 40px; text-align: left; padding-left: 10px; }
+#research:hover > ul { display: block; }
+
+#link ul { display: none; position: absolute; top: 100%; right: 0; background: white; padding 0; width: 300px; padding-top:1em; border: 2px black solid; }
+#link ul li { float: none; width: 290px; line-height: 40px; text-align: left; padding-left: 10px; }
+#link:hover > ul { display: block; }
 
 nav ul li:hover { background: rgb(200, 200, 200); }
 
