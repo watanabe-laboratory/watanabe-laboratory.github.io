@@ -103,3 +103,12 @@ h1 {
 .date {
   color: rgb(91, 91, 91);
 }
+
+dt {
+  font-size: 120%;
+  font-weight: bold;
+}
+
+dd {
+  margin-bottom: 1em;
+}
