@@ -29,4 +29,4 @@ title: 研究室のメンバー
   岸本 章宏，IBM Ireland Research Lab, Dublin, Ireland
 
 * 元博士研究員\\
-  Benjamin Rossman, 国立情報学研究所，ビッグデータ数理国際研究センター
+  Benjamin Rossman, University of Toronto, Mathematics and Computer Science
