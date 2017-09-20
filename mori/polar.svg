@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="100%" height="100%" viewBox="0 0 1200 1200" onload="init()">
+  <title>Channel polarization</title>
+  <desc>Factor graph of polar codes</desc>
+    <defs>
+      <g id="Z0">
+        <desc>Z graph</desc>
+        <g stroke="black" stroke-width="2">
+          <line x1="20" y1="10" x2="70" y2="10" />
+          <line x1="20" y1="110" x2="70" y2="110" />
+          <line x1="70" y1="10" x2="20" y2="110" />
+          <line x1="90" y1="10" x2="100" y2="10" />
+          <line x1="90" y1="110" x2="100" y2="110" />
+        </g>
+        <g fill="red" >
+          <circle cx="10" cy="10" r="10" />
+          <circle cx="110" cy="10" r="10" />
+          <circle cx="10" cy="110" r="10" />
+          <circle cx="110" cy="110" r="10" />
+        </g>
+        <g fill="blue">
+          <rect x="70" y="00" width="20" height="20" />
+          <rect x="70" y="100" width="20" height="20" />
+        </g>
+      </g>
+      <symbol id="button-n" viewBox="0 0 100 200">
+          <path d="M 50 0 L 100 70 L 0 70 z" fill="red" stroke="red" stroke-width="3" onclick="n_inc()" />
+          <path d="M 50 200 L 100 130 L 0 130 z" fill="blue" stroke="blue" stroke-width="3" onclick="n_dec()" />
+      </symbol>
+      <symbol id="button-e" viewBox="0 0 100 200">
+          <path d="M 50 0 L 100 70 L 0 70 z" fill="red" stroke="red" stroke-width="3" onclick="e_inc()" />
+          <path d="M 50 200 L 100 130 L 0 130 z" fill="blue" stroke="blue" stroke-width="3" onclick="e_dec()" />
+      </symbol>
+      <g id="G0">
+        <use x="0" y="0" width="1000" height="1000" xlink:href="#Z0" />
+      </g>
+    </defs>
+    <use x="250" y="1020" width="80" height="160" xlink:href="#button-n" />
+    <use x="950" y="1020" width="80" height="160" xlink:href="#button-e" />
+    <use id="factor" transform="translate(200,0) scale(8.3333)" xlink:href="#G0" />
+    <use id="bhat" x="0" y="0" height="1000" width="200" xlink:href="#B0" />
+
+    <text  id="text-n" x="100" y="1110" font-family="Verdana" font-size="50" fill="black"> n=1 </text>
+    <text  id="text-e" x="760" y="1110" font-family="Verdana" font-size="50" fill="black"> e=0.5 </text>
+
+    <script type="application/ecmascript"><![CDATA[
+      var n = 0;
+      var limit = 6;
+      var ns = 'http://www.w3.org/2000/svg';
+      var xlink = 'http://www.w3.org/1999/xlink';
+      var Bh;
+      var e = 5;
+
+      function e_inc(){
+        if(e == 10) return;
+        var text_e = document.getElementById("text-e");
+        e++;
+        if(text_e)
+          text_e.firstChild.replaceData(3,3,String(e/10));
+        Bhattacharyya(limit);
+        var i = 0;
+        do {
+          Bupdate(i);
+          i++;
+        } while(i <= limit-0);
+      }
+      function e_dec(){
+        if(e == 0) return;
+        var text_e = document.getElementById("text-e");
+        e--;
+        if(text_e)
+          text_e.firstChild.replaceData(3,3,String(e/10));
+        Bhattacharyya(limit);
+        var i = 0;
+        do {
+          Bupdate(i);
+          i++;
+        } while(i <= limit-0);
+      }
+      function n_inc(){
+        if(n==limit) return;
+        var text_n = document.getElementById("text-n");
+        n++;
+        var fac = document.getElementById("factor");
+        var sc = (120*Math.pow(2,n)+80*(Math.pow(2,n)-1));
+        fac.setAttributeNS(xlink, "xlink:href", "#G"+String(n));
+        fac.setAttribute("transform", "translate(200,0) scale("+String(1000/(1*sc))+")");
+
+        var bha = document.getElementById("bhat");
+        bha.setAttributeNS(xlink, "xlink:href", "#B"+String(n));
+        if(text_n)
+          text_n.firstChild.replaceData(3,1,String(n+1));
+      }
+      function n_dec(){
+        if(n==0) return;
+        var text_n = document.getElementById("text-n");
+        n--;
+        var fac = document.getElementById("factor");
+        var sc = (120*Math.pow(2,n)+80*(Math.pow(2,n)-1));
+        fac.setAttributeNS(xlink, "xlink:href", "#G"+String(n));
+        fac.setAttribute("transform", "translate(200,0) scale("+String(1000/(1*sc))+")");
+
+        var bha = document.getElementById("bhat");
+        bha.setAttributeNS(xlink, "xlink:href", "#B"+String(n));
+        if(text_n)
+          text_n.firstChild.replaceData(3,1,String(n+1));
+      }
+
+      function init(){
+        Bhattacharyya(limit);
+        var i = 0;
+        do {
+          var e;
+          Binitial(i);
+          if(i != 0){
+            Zinitial(i);
+            Ginitial(i);
+          }
+          i++;
+        } while(i <= limit-0);
+      }
+
+      function Binitial(n){
+          var D = document.createElementNS(ns, "defs");
+          document.documentElement.appendChild(D);
+          var B = document.createElementNS(ns, "symbol");
+          D.appendChild(B);
+          B.setAttribute("id", "B"+String(n));
+          var he = (120*Math.pow(2,n)+80*(Math.pow(2,n)-1));
+          B.setAttribute("viewBox", "0 0 " + String(he/5.0) + " " + String(he));
+          var bg = document.createElementNS(ns, "rect");
+          var lines = document.createElementNS(ns, "g");
+          var circles = document.createElementNS(ns, "g");
+          circles.setAttribute("id", "B"+String(n)+"circles");
+          B.appendChild(bg);
+          B.appendChild(lines);
+          B.appendChild(circles);
+
+          bg.setAttribute("x",0);
+          bg.setAttribute("y",0);
+          bg.setAttribute("width",he/5.0);
+          bg.setAttribute("height",he);
+          bg.setAttribute("fill", "green");
+          bg.setAttribute("opacity", 0.1);
+
+          lines.setAttribute("stroke", "black");
+          lines.setAttribute("stroke-width", 2);
+
+          circles.setAttribute("fill", "gray");
+          circles.setAttribute("fill-opacity", 0.5);
+
+          var i = 0;
+          var bar = new Array(Math.pow(2,n+1));
+          var cir = new Array(Math.pow(2,n+1));
+          do {
+            bar[i] = document.createElementNS(ns, "line");
+            bar[i].setAttribute("x1", 0);
+            bar[i].setAttribute("y1", 10+100*i);
+            bar[i].setAttribute("x2", he/5.0);
+            bar[i].setAttribute("y2", 10+100*i);
+            lines.appendChild(bar[i]);
+
+            cir[i] = document.createElementNS(ns, "circle");
+            cir[i].setAttribute("cx", (1-Bh[n+1][i])*he/5.0);
+            cir[i].setAttribute("cy", 10+100*i);
+            cir[i].setAttribute("r", 1+he/60.0);
+            circles.appendChild(cir[i]);
+
+            i++;
+          } while(i < Math.pow(2,n+1));
+      }
+
+      function Bupdate(n){
+        var circles = document.getElementById("B"+String(n)+"circles");
+        var i = 0;
+        var he = (120*Math.pow(2,n)+80*(Math.pow(2,n)-1));
+        for(i = 0; i < circles.childNodes.length; i++){
+            circles.childNodes[i].setAttribute("cx", (1-Bh[n+1][i])*he/5.0);
+        }
+      }
+
+      function Zinitial(n){
+        var e = new Array(4);
+        document.documentElement.appendChild(e[0] = document.createElementNS(ns, "defs"));
+        var hf = (120*Math.pow(2,n-1)+80*(Math.pow(2,n-1)-1));
+        var sc = (hf/(2*hf+80));
+        e[0].appendChild(e[1] = document.createElementNS(ns, "g"));
+        e[1].appendChild(e[2] = document.createElementNS(ns, "use"));
+        e[1].appendChild(e[3] = document.createElementNS(ns, "use"));
+        e[1].setAttribute("id", "Z" + String(n));
+        e[2].setAttribute("x", 0);
+        e[2].setAttribute("y", 0);
+        e[2].setAttributeNS(xlink, "xlink:href", "#Z" + String(n-1));
+        e[3].setAttribute("x", 0);
+        e[3].setAttribute("y", hf+80);
+        e[3].setAttributeNS(xlink, "xlink:href", "#Z" + String(n-1));
+      }
+
+      function Ginitial(n){
+          var e = new Array(6);
+
+          var hf = (120*Math.pow(2,n-1)+80*(Math.pow(2,n-1)-1));
+          var xp = 80+hf;
+
+          document.documentElement.appendChild(e[0] = document.createElementNS(ns, "defs"));
+          e[0].appendChild(e[1] = document.createElementNS(ns, "g"));
+          e[1].setAttribute("id", "G" + String(n));
+
+          e[1].appendChild(e[2] = document.createElementNS(ns, "use"));
+          e[2].setAttributeNS(xlink, 'xlink:href', "#Z"+String(n));
+
+          e[1].appendChild(e[3] = document.createElementNS(ns, "use"));
+          e[3].setAttribute("x", xp);
+          e[3].setAttribute("y", 0);
+          e[3].setAttributeNS(xlink, "xlink:href", "#G" + String(n-1));
+
+          e[1].appendChild(e[4] = document.createElementNS(ns, "use"));
+          e[4].setAttribute("x", xp);
+          e[4].setAttribute("y", xp);
+          e[4].setAttributeNS(xlink, "xlink:href", "#G" + String(n-1));
+
+          e[1].appendChild(e[5] = document.createElementNS(ns, "g"));
+          e[5].setAttribute("stroke", "black");
+          e[5].setAttribute("stroke-width", 2);
+
+          var i = 0;
+          var edge = new Array(Math.pow(2,n+1));
+          do {
+            edge[i] = document.createElementNS(ns, "line");
+            edge[i].setAttribute("x1",120);
+            edge[i].setAttribute("y1",10+100*i);
+            edge[i].setAttribute("x2",xp);
+            edge[i].setAttribute("y2",10+50*i);
+            e[5].appendChild(edge[i]);
+
+            edge[i+1] = document.createElementNS(ns, "line");
+            edge[i+1].setAttribute("x1",120);
+            edge[i+1].setAttribute("y1",10+100*(i+1));
+            edge[i+1].setAttribute("x2",xp);
+            edge[i+1].setAttribute("y2",10+50*i+xp);
+            e[5].appendChild(edge[i+1]);
+            i += 2;
+          } while(i < Math.pow(2,n+1));
+      }
+
+      function Bhattacharyya(n){
+        Bh = new Array(n+2);
+        var i = 1;
+
+        Bh[0] = new Array(1);
+        Bh[0][0] = e/10.0;
+
+        do {
+          var j = 0;
+          Bh[i] = new Array(Math.pow(2,i));
+          do {
+//            Bh[i][j] = 1-(1-Bh[i-1][j/2])*(1-Bh[i-1][j/2]);
+            Bh[i][j] = Bh[i-1][j/2]*(2-Bh[i-1][j/2]);
+            Bh[i][j+1] = Bh[i-1][j/2]*Bh[i-1][j/2];
+            j+=2;
+          } while(j < Math.pow(2,i));
+          i++;
+        } while(i <= n+1);
+      }
+    ]]></script>
+
+  <rect x="0" y="0" width="200" height="1000" fill="none" stroke="black" stroke-width=".02cm"/>
+  <rect x="0" y="0" width="1200" height="1000" fill="none" stroke="black" stroke-width=".02cm"/>
+  <rect x="0" y="0" width="1200" height="1200" fill="none" stroke="black" stroke-width=".02cm"/>
+</svg>
