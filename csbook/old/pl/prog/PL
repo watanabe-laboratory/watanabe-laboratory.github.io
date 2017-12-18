@@ -1,0 +1,499 @@
+#!/usr/local/bin/perl
+
+# Title: PL : Primitive Language
+# Version: 0.2.4
+# Author: YAMAZAKI Tadashi <tyam@is.titech.ac.jp>
+# Date: Wed Jan  9 15:29:46 JST 2002
+
+use Math::BigInt;
+
+# Program information
+$myname = "PL";
+$myversion = "0.2.3";
+
+# Commands
+$c{letc} = 1;
+$c{letv} = 2;
+$c{addc} = 3;
+$c{addv} = 4;
+$c{subc} = 5;
+$c{subv} = 6;
+$c{if} = 7;
+$c{goto} = 8;
+$c{retc} = 9;
+$c{retv} = 10;
+$c{program} = 11;
+$c{program_end} = 12;
+$c{print} = 20;
+$c{multc} = 21;
+$c{multv} = 22;
+$c{divc} = 23;
+$c{divv} = 24;
+$c{modc} = 25;
+$c{modv} = 26;
+$c{subroutine} = 27;
+
+# Expressions
+$e{"!="} = 101;
+$e{"=="} = 102;
+$e{"<"}  = 103;
+$e{">"}  = 104;
+$e{"<="} = 105;
+$e{">="} = 106;
+
+# Controls
+$filename = "";
+$commentsymbol = "#";
+$labelsymbol = ":";
+$debug = 0;			# 1:ON, 0:OFF
+$DEBUG = 0;			# 1:ON, 0:OFF
+$output = 0;			# 1:ON, 0:OFF
+$OUTPUT = 0;			# 1:ON, 0:OFF
+
+# Global variables
+%labeltable = ();		# created by label
+%programtable = ();		# created by label
+@list = ();			# created by label
+@renumberlist = ();		# for debug & trace
+%registertable = ();		# for register initialization
+@program = ();			# created by parse
+$counterhead = 1;		# program starts from PC=1
+$stackbottom = -1;
+@return_address = ($stackbottom);
+$mainprogram = "main";
+$PC = $counterhead;
+@register = ();
+
+# Main routine
+&arguments;
+@list = &label;
+&parse(@list);
+&getrenumberlist(@list);
+if ($debug){&debug};
+if ($DEBUG){&DEBUG};
+&run(@program);
+0;
+
+sub run {
+  my($finish, $a, $b, $comm, $arg1, $arg2, $arg3, $i);
+
+  foreach $i (keys(%registertable)){ # initialize registers
+    if (! $register[$i]){$register[$i] = Math::BigInt->new(0);}
+  }
+  $finish = 0;			# 1:finish, 0:continue
+  $PC = $programtable{$mainprogram};
+  while(! $finish){
+    ($comm, $arg1, $arg2, $arg3) = split(' ', $program[$PC]);
+    if($output){&output;}
+    if($OUTPUT){&OUTPUT;}
+    # nop (i.e., label)
+    if (! $comm){
+      $PC++;
+      next;
+    }
+    # $i = n
+    if ($comm == $c{letc}){
+      $a = Math::BigInt->new($arg2);
+      $register[$arg1] = $a;
+      $PC++;
+      next;
+    }
+    # $i = $j
+    if ($comm == $c{letv}){
+      $a = Math::BigInt->new($register[$arg2]);
+      $register[$arg1] = $a;
+      $PC++;
+      next;
+    }
+    # $i = $j + k
+    if ($comm == $c{addc}){
+      $a = Math::BigInt->new($register[$arg2]);
+      $b = Math::BigInt->new($arg3);
+      $register[$arg1] = $a + $b;
+      $PC++;
+      next;
+    }
+    # $i = $j + $k
+    if ($comm == $c{addv}){
+      $a = Math::BigInt->new($register[$arg2]);
+      $b = Math::BigInt->new($register[$arg3]);
+      $register[$arg1] = $a + $b;
+      $PC++;
+      next;
+    }
+    # $i = $j - k
+    if ($comm == $c{subc}){
+      $a = Math::BigInt->new($register[$arg2]);
+      $b = Math::BigInt->new($arg3);
+      $register[$arg1] = $a - $b;
+#      if ($register[$arg1] < 0){
+#	$register[$arg1] = 0;
+#      }
+      $PC++;
+      next;
+    }
+    # $i = $j - $k
+    if ($comm == $c{subv}){
+      $a = Math::BigInt->new($register[$arg2]);
+      $b = Math::BigInt->new($register[$arg3]);
+      $register[$arg1] = $a - $b;
+#      if ($register[$arg1] < 0){
+#	$register[$arg1] = 0;
+#      }
+      $PC++;
+      next;
+    }
+    if ($comm == $c{if}){
+      if ( ($arg1 == $e{"!="}   && $register[$arg2] != 0)
+	   ||($arg1 == $e{"=="} && $register[$arg2] == 0)
+	   ||($arg1 == $e{">"}  && $register[$arg2]  > 0)
+	   ||($arg1 == $e{">="} && $register[$arg2] >= 0)
+	   ||($arg1 == $e{"<"}  && $register[$arg2]  < 0)
+	   ||($arg1 == $e{"<="} && $register[$arg2] <= 0) ){
+	$PC = $arg3;
+      }else{
+	$PC++;
+      }
+      next;
+    }
+    if ($comm == $c{goto}){
+      $PC = $arg1;
+      next;
+    }
+    if ($comm == $c{retc}){
+      $p = $arg1;
+      $p =~ s/^[+]//;
+      printf("%s\n", $p);
+      $finish = 1;
+      next;
+    }
+    if ($comm == $c{retv}){
+      $p = $register[$arg1];
+      $p =~ s/^[+]//;
+      printf("%s\n", $p);
+      $finish = 1;
+      next;
+    }
+    if ($comm == $c{program}){
+      $PC++;
+      next;
+    }
+    if ($comm == $c{program_end}){
+      $PC = pop(@return_address);
+      if ($PC == $stackbottom){
+	$finish = 1;
+      }
+      next;
+    }
+    # print $i
+    if ($comm == $c{print}){
+      $p = $register[$arg1];
+      if (! $p){
+	$p = "0";
+      }else{
+	$p =~ s/^[+]//;
+      }
+      printf("%s\n", $p);
+      $PC++;
+      next;
+    }
+    # $i = $j * k
+    if ($comm == $c{multc}){
+      $a = Math::BigInt->new($register[$arg2]);
+      $b = Math::BigInt->new($arg3);
+      $register[$arg1] = $a * $b;
+      $PC++;
+      next;
+    }
+    # $i = $j * $k
+    if ($comm == $c{multv}){
+      $a = Math::BigInt->new($register[$arg2]);
+      $b = Math::BigInt->new($register[$arg3]);
+      $register[$arg1] = $a * $b;
+      $PC++;
+      next;
+    }
+    # $i = $j / k
+    if ($comm == $c{divc}){
+      $a = Math::BigInt->new($register[$arg2]);
+      $b = Math::BigInt->new($arg3);
+      $register[$arg1] = $a / $b;
+      $PC++;
+      next;
+    }
+    # $i = $j / $k
+    if ($comm == $c{divv}){
+      $a = Math::BigInt->new($register[$arg2]);
+      $b = Math::BigInt->new($register[$arg3]);
+      $register[$arg1] = $a / $b;
+      $PC++;
+      next;
+    }
+    # $i = $j % k
+    if ($comm == $c{modc}){
+      $a = Math::BigInt->new($register[$arg2]);
+      $b = Math::BigInt->new($arg3);
+      $register[$arg1] = $a % $b;
+      $PC++;
+      next;
+    }
+    # $i = $j % $k
+    if ($comm == $c{modv}){
+      $a = Math::BigInt->new($register[$arg2]);
+      $b = Math::BigInt->new($register[$arg3]);
+      $register[$arg1] = $a % $b;
+      $PC++;
+      next;
+    }
+    # &name
+    if ($comm == $c{subroutine}){
+      push(@return_address, $PC+1);
+      $PC = $arg1;
+      next;
+    }
+  }
+}
+sub parse{
+  my (@list, $PC, $parsed);
+  my ($program, $label, $ref, $command);
+
+  @list = @_;
+
+  foreach $_ (@list){
+    s/$commentsymbol.*$//; s/\s*$//; s/^\s*//; s/\s+//g; # remove blanks
+    s/^[^$labelsymbol]*$labelsymbol//;	# remove label
+
+    $parsed = 0;
+
+    # comments or labels or the first line
+    if (/^$/){
+      $command = "";
+      $parsed = 1;
+    }
+    # $i = n
+    if (/^\$([0-9]+)=([-0-9]+)$/){
+      $command = "$c{letc} $1 $2";
+      $parsed = 1;
+    }
+    # $i = $j
+    if (/^\$([0-9]+)=\$([0-9]+)$/){
+      $command = "$c{letv} $1 $2";
+      $parsed = 1;
+    }
+    # $i = $j + k
+    if (/^\$([0-9]+)=\$([0-9]+)\+([0-9]+)$/){
+      $command = "$c{addc} $1 $2 $3";
+      $parsed = 1;
+    }
+    # $i = $j + $k
+    if (/^\$([0-9]+)=\$([0-9]+)\+\$([0-9]+)$/){
+      $command = "$c{addv} $1 $2 $3";
+      $parsed = 1;
+    }
+    # $i = $j - k
+    if (/^\$([0-9]+)=\$([0-9]+)\-([0-9]+)$/){
+      $command = "$c{subc} $1 $2 $3";
+      $parsed = 1;
+    }
+    # $i = $j - $k
+    if (/^\$([0-9]+)=\$([0-9]+)\-\$([0-9]+)$/){
+      $command = "$c{subv} $1 $2 $3";
+      $parsed = 1;
+    }
+    # if <condition> goto
+    if (/^if\(?\$([0-9]+)([<>\!=]+)0\)?goto(\w+)$/){
+      if (!$e{$2}){
+	die "parse error: line $PC: condition \"$2\" is awkward.\n";
+      }
+      $label = $program.$3;
+      if (! $labeltable{$label}){
+	die "parse error: line $PC: label \"$3\" does not exist.\n";
+      }
+      $command = "$c{if} $e{$2} $1 $labeltable{$label}";
+      $parsed = 1;
+    }
+    # goto n
+    if (/^goto(\w+)$/){
+      $label = $program.$1;
+      if (! $labeltable{$label}){
+	die "parse error: line $PC: label \"$label\" does not exist.\n";
+      }
+      $command = "$c{goto} $labeltable{$label}";
+      $parsed = 1;
+    }
+    # return n
+    if (/^return\(?([-0-9]+)\)?$/){
+      $command = "$c{retc} $1";
+      $parsed = 1;
+    }
+    # return $i
+    if (/^return\(?\$([0-9]+)\)?$/){
+      $command = "$c{retv} $1";
+      $parsed = 1;
+    }
+    # program <progname>
+    if (/^program(\w+)/&& !/^programend/){
+      $program = $1;
+      $command = "$c{program} $1";
+      $parsed = 1;
+    }
+    # program end
+    if (/^programend\.?$/){
+      $command = "$c{program_end}";
+      $parsed = 1;
+    }
+    # print $i
+    if (/^print\(?\$([0-9]+)\)?$/){
+      $command = "$c{print} $1";
+      $parsed = 1;
+    }
+    # $i = $j * k
+    if (/^\$([0-9]+)=\$([0-9]+)\*([0-9]+)$/){
+      $command = "$c{multc} $1 $2 $3";
+      $parsed = 1;
+    }
+    # $i = $j * $k
+    if (/^\$([0-9]+)=\$([0-9]+)\*\$([0-9]+)$/){
+      $command = "$c{multv} $1 $2 $3";
+      $parsed = 1;
+    }
+    # $i = $j / k
+    if (/^\$([0-9]+)=\$([0-9]+)\/([0-9]+)$/){
+      $command = "$c{divc} $1 $2 $3";
+      $parsed = 1;
+    }
+    # $i = $j / $k
+    if (/^\$([0-9]+)=\$([0-9]+)\/\$([0-9]+)$/){
+      $command = "$c{divv} $1 $2 $3";
+      $parsed = 1;
+    }
+    # $i = $j % k
+    if (/^\$([0-9]+)=\$([0-9]+)%([0-9]+)$/){
+      $command = "$c{modc} $1 $2 $3";
+      $parsed = 1;
+    }
+    # $i = $j % $k
+    if (/^\$([0-9]+)=\$([0-9]+)%\$([0-9]+)$/){
+      $command = "$c{modv} $1 $2 $3";
+      $parsed = 1;
+    }
+    # &name
+    if (/^\&(\w+)$/){
+      if (! ($programtable{$1})){
+	die "parse error: line $PC: program \"$1\" does not exist.\n";
+      }
+      $command = "$c{subroutine} $programtable{$1}";
+      $parsed = 1;
+    }
+    if (! $parsed){
+      die "parse error: line $PC: \"$_\" cannot be parsed.\n";
+    }
+    $program[$PC++] = $command;
+  }
+}
+
+# 
+# remove blanks, create a list of labels, assign global numbers
+#
+sub label {
+  my (@list, $index, $label, $program);
+
+  open(I, $filename) || die "label: no such file \"$filename\".\n";
+  $index = $counterhead;
+  while(<I>){
+    chomp;
+    s/$commentsymbol.*$//; s/\s*$//; if (/^\s*$/){next;} # skip blank
+    if (/\s*(\w+)$labelsymbol/){ # store label name
+      $label = $program.$1;
+      $labeltable{$label} = $index;
+    }
+    if (/program\s*(\w+)/ && ! /program\s*end/){ # store program name
+      $program = $1;
+      $programtable{$program} = $index;
+    }
+    $list[$index++] = $_;
+    while(/^(.*)\$([0-9]+)(.*)$/){
+      $registertable{$2} = 0;
+      $_ = "$1 $3";
+    }
+  }
+  close(I);
+  @list;
+}
+#
+# Misc.
+#
+sub arguments {
+  local($i, $getfilename);
+  if (@ARGV < 1){
+    die "usage: $PL [-t] [-d] [-T] [-D] <filename> <reg1> <reg2> ... .\n";
+  }
+  $i = 1;
+  $getfilename = 0;
+  while(<@ARGV>){
+    if (/-t/){$output = 1; next;}
+    if (/-T/){$OUTPUT = 1; next;}
+    if (/-d/){$debug = 1; next;}
+    if (/-D/){$DEBUG = 1; next;}
+    if (! $getfilename){
+      $filename = $_;
+      $getfilename = 1;
+    }else{
+      my($a);
+      $a = Math::BigInt->new($_);
+      $register[$i++] = $a;
+    }
+  }
+}  
+sub output {
+  my ($command);
+  $command = $list[$PC];
+  printf(STDERR "%03d    ", $PC);
+  printf(STDERR "(%3s) (%3s) (%3s) (%3s) (%3s)    ",
+	 $register[1], $register[2], $register[3], $register[4], $register[5]);
+  printf(STDERR "%s\n", $command);
+}
+sub OUTPUT{
+  my ($command);
+  $command = $renumberlist[$PC];
+  printf(STDERR "%03d    ", $PC);
+  printf(STDERR "(%3s) (%3s) (%3s) (%3s) (%3s)    ",
+	 $register[1], $register[2], $register[3], $register[4], $register[5]);
+  printf(STDERR "%s\n", $command);
+}
+sub getrenumberlist{
+  my(@list, $index);
+  @list = @_;
+  for($index = $counterhead; $index < @list; $index++){
+    $_ = $list[$index];
+    s/\w+$labelsymbol//;
+    if (/program\s*(\w+)/ && ! /program\s*end/){
+      $program = $1;
+    }
+    if (/(.*goto\s*)(\w+)/){
+      $label = $program.$2;
+      $_ = $1.$labeltable{$label};
+    }
+    if (/(.*\&)(\w+)/){
+      $_ = $1.$programtable{$2};
+    }
+    $renumberlist[$index] = $_;
+  }
+}
+    
+sub debug{
+  my ($index);
+  print STDERR "DEBUG-----------------------------------\n";
+  for($index = $counterhead; $index < @list; $index++){
+    printf(STDERR "%03d    %s\n", $index, $list[$index]);
+  }
+  print STDERR "----------------------------------------\n";
+}  
+sub DEBUG{
+  my ($index);
+  print STDERR "DEBUG-----------------------------------\n";
+  for($index = $counterhead; $index < @renumberlist; $index++){
+    printf(STDERR "%d: %s\n", $index, $renumberlist[$index]);
+  }
+  print STDERR "----------------------------------------\n";
+}

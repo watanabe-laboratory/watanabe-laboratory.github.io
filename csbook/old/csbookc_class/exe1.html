@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="stylesheet" type="text/css" href="../style.css" />
+		<link rel="stylesheet" type="text/css" href="style.css" />
+		<title>課題１のための練習・演習</title>
+	</head>
+   
+	<body>
+		<div id="class_header">
+			<table class="body">
+				<tr>
+					<td class="title">課題１のための練習・演習<br />
+対象クラス (CS1a, CS1b, CS4a, CS5b, CS5c)</td>
+				<td class="jump"><a href="../class.html">本のページに戻る</a><a href="http://www.is.titech.ac.jp/~kashima/ComputerScience.html">授業のページに戻る</a>
+				<td>
+				</tr>
+			</table>
+			</div>
+			
+		<div id="main">
+			<h2>課題1</h2>
+			
+			<p>以下の問題群は3つに分かれています．練習問題は自分で練習したり考えたりするための問題で，直接成績には反映されませんが，期末試験に出る可能性があります．授業中に宿題として出した問題も含まれています（（宿）マーク）．演習問題は演習で皆さんに使ってもらう可能性のある問題です．発展問題は少し難しい問題です．興味がある人は頑張って解いてみてください．</p>
+			
+			<p>（調）マークをつけた問題は文献などを調べて答える問題です．それ以外の問題は自分で考えて解いてください．演習問題は「解答」をクリックすると解答が出ます．</p>
+			
+			<h3>練習問題</h3>
+			<ol>
+				<li>（調）コンピュータの中で実際に整数はどのように 2 進列で表されているかを調べてみよう．（とくに負数はどのように表されているのだろうか？）</li>
+				<li>（調）コンピュータの中で実際に小数はどのように 2 進列で表わされているかを調べてみよう．</li>
+				<li>分数，たとえば 1/3 や 3/7 などを 1 つの数（もしくは 2 進列）として
+どのように表せばよいだろうか？（解説：コンピュータ内では，有理数は小数の形で表れている．しかも，有限桁で打ち切られるので近似値になっている．けれども，有理数を正確に分数で表し，それを使って計算をするプログラムを作ることは可能である．その場合，分数を 2 つの組で表すのが普通だろう．けれどもこの問題では 1 つの数で表す方法を考えてみる．）</li>
+				<li>（調）文字 1 文字を表すのに 2 B かかるとする．すると，400 字詰め原稿用紙 1 枚分は，約 800 B（つまり，0.8 KB）の情報量となる．では，音楽 1 曲分を表すには何 B くらい必要なのだろうか？原稿用紙何枚分の情報量になるのだろうか？調べてみよう．（注：B は Byte（バイト）の意味．1 バイトは 8 ビット，つまり，8 個の 0 と 1 の列のこと．）</li>
+				<li>引き算（与えられた 2 つの自然数 <code>x, y</code> に対して <code>x - y</code> を求める計算）を，± 1 と繰り返しのみで行う Ruby プログラムを作ってみよう．（注：<code>y > x</code> の場合には通常は負数が答えだが，<code>x - y</code> の答えが 0 となるようにする方法も考えてみよう．）</li>
+				<li>割り算（与えられた 2 つの自然数 <code>x, y</code> に対して <code>x / y</code> の商を求める計算）を，加減算，繰り返しのみで行う Ruby プログラムを作ってみよう．なお，対象は自然数（0 以上の整数）と仮定してよい．また，<code>y = 0</code> の場合には計算が止まらなくなってもよい．</li>
+				<li>上と同様の割り算の計算プログラムだが，<code>y = 0</code> の場合にも計算が止まるようなプログラムを作ってみよう．ただし，条件分岐文を使ってもよい．</li>
+			</ol>
+			
+			<h3>演習問題</h3>
+			<ol>
+				<li>入力された整数の平方根を求めるプログラムを作ってみよう．
+				<div class="codebox" id = "code1"><a onClick="code_toggle(1)">コードを表示する</a><code class="toggle"># sq.rb
+# 入力: 自然数 n
+# 出力: sq(x)
+
+n = gets().to_i       # 入力された自然数を n に代入
+a = 1; a2 = a * a     # 1 を a に代入，a の2乗を a2 に代入
+while a2 <= n         # a2 が n 以下なら直後の命令を実行，それ以外なら end の次の命令に飛ぶ
+  a = a + 1           #   a + 1 の計算結果を a に代入
+  a2 = a * a          #   a の2乗を a2 に代入
+end                   # while に戻る
+puts(a - 1)           # a - 1 の計算結果を出力</code></div></li>
+				
+				<li>入力された 2 整数の和の計算を ±1 と繰り返しのみで行うプログラムを作ってみよう．
+				<div class="codebox" id = "code2"><a onClick="code_toggle(2)">コードを表示する</a><code class="toggle"># add.rb
+# 入力: 自然数 x, y
+# 出力: x + y
+
+a = gets().to_i       # 入力された自然数を a に代入
+b = gets().to_i       # 入力された自然数を b に代入
+wa = a                # a の値を wa に代入
+while b > 0           # b が 0 より大きい間は end までを繰り返す
+  wa = wa + 1         #   wa + 1 の値を wa に代入
+  b = b - 1           #   b - 1 の値を b に代入
+end                   # 繰り返しの終わり
+puts(wa)              # wa の値を出力</code></div></li>
+				
+				<li>入力された 2 整数の積の計算を加減算だけで行うプログラムを作ってみよう．
+				<div class="codebox" id = "code3"><a onClick="code_toggle(3)">コードを表示する</a><code class="toggle"># mult.rb
+# 入力: 自然数 x, y
+# 出力: x × y
+
+x = gets().to_i       # 入力された自然数を x に代入
+y = gets().to_i       # 入力された自然数を y に代入
+seki = 0              # 0 を seki に代入
+while y > 0           # y が 0 より大きい間は end までを繰り返す
+  seki = seki + x     #   wa + 1 の値を wa に代入
+  y = y - 1           #   y - 1 の値を y に代入
+end                   # 繰り返しの終わり
+puts(seki)            # seki の値を出力</code></div></li>
+				
+				<li>入力された 2 整数の割り算を加減算だけで行うプログラムを作ってみよう．
+				<div class="codebox" id = "code4"><a onClick="code_toggle(4)">コードを表示する</a><code class="toggle"># div.rb
+# 入力: 自然数 x, y
+# 出力: x ÷ y の商と余り
+
+x = gets().to_i       # 入力された自然数を x に代入
+y = gets().to_i       # 入力された自然数を y に代入
+shou = 0              # 0 を shou に代入
+amari = x             # x を amari に代入
+while amari >= y      # amari が y 以上の間は end までを繰り返す
+  shou = shou + 1     #   shou + 1 の値を shou に代入
+  amari = amari - y   #   amari - y の値を amari に代入
+end                   # 繰り返しの終わり
+puts(shou)            # shou の値を出力
+puts(amari)           # amari の値を出力</code></div></li>
+				
+				<li>mult.rb に add.rb を埋め込んでみよう．
+				<div class="codebox" id = "code5"><a onClick="code_toggle(5)">コードを表示する</a><code class="toggle"># mult_basiconly.rb
+# 入力: 自然数 x, y
+# 出力: x × y
+
+x = gets().to_i             # 入力された自然数を x に代入
+y = gets().to_i             # 入力された自然数を y に代入
+seki = 0                    # 0 を seki に代入
+while y > 0                 # y が 0 より大きい間は end までを繰り返す
+  a = seki; b = x; wa = a   #   和のプログラム add.rb を挿入
+  while b > 0
+    wa = wa + 1; b = b - 1
+  end                       #   和のプログラム add.rb はここまで
+  seki = wa                 #   wa の値 (seki + x) を seki に代入
+  y = y - 1                 #   y - 1 の値を y に代入
+end                         # 繰り返しの終わり
+puts(seki)                  # seki の値を出力</code></div></li>
+				
+				<li>入力された整数の絶対値を求めるプログラムを作ってみよう．（ヒント：入力が 0 以上の場合と 0 未満の場合に分けて考える．）
+				<div class="codebox" id = "code6"><a onClick="code_toggle(6)">コードを表示する</a><code class="toggle"># abs.rb
+# 入力: 整数 x
+# 出力: x の絶対値
+
+n = gets().to_i       # 入力された整数を n に代入
+if n >= 0             # n が 0 以上なら，
+  puts(n)             #   n の値を出力
+else                  # n が 0 以上でない (n が 0 未満) なら
+  puts(n * (-1))      #   n * (-1) の計算結果を出力
+end                   # 条件分岐終了</code></div></li>
+
+				<li>2つの自然数 <code>x, y</code> に対してユークリッドの互除法で最大公約数を求めるプログラムを作ってみよう．
+				<div class="codebox" id = "code7"><a onClick="code_toggle(7)">コードを表示する</a><code class="toggle"># gcd.rb
+# 入力: 自然数 x, y
+# 出力: x と y の最大公約数
+
+x = gets().to_i       # 入力された自然数を x に代入
+y = gets().to_i       # 入力された自然数を y に代入
+r = x % y             # x を y で割った余りを r に代入
+while r > 0           # r が 0 より大きい間は end までを繰り返す
+  x = y               #   y の値を x に代入
+  y = r               #   r の値を y に代入
+  r = x % y           #   x を y で割った余りを r に代入
+end                   # while に戻る
+puts(y)               # y の値 (最大公約数) を出力</code></div></li>
+
+				<li>以下に示すプログラム smile.rb を実行すると， どういう画面が得られるだろうか？
+				<div class="codebox"><code># smile.rb
+# 出力: スマイルマークが右側から消えていく
+
+d1 =  1000000000000000000000000000
+d2 =  1000000000110000110000000000
+d3 =  1000000000110000110000000000
+d4 =  1000000000000000000000000000
+d5 =  1000001100000000000011000000
+d6 =  1000000110000000000110000000
+d7 =  1000000011000000001100000000
+d8 =  1000000000111111110000000000
+d9 =  1000000000000000000000000000
+d10 = 1000000000000000000000000000
+
+t = 0
+
+while t < 29
+  puts(d1)
+  puts(d2)
+  puts(d3)
+  puts(d4)
+  puts(d5)
+  puts(d6)
+  puts(d7)
+  puts(d8)
+  puts(d9)
+  puts(d10)
+  puts()                      # 空行を出力
+
+  sleep(0.1)                  # 0.1秒休む
+
+  d1 = d1 / 10
+  d2 = d2 / 10
+  d3 = d3 / 10
+  d4 = d4 / 10
+  d5 = d5 / 10
+  d6 = d6 / 10
+  d7 = d7 / 10
+  d8 = d8 / 10
+  d9 = d9 / 10
+  d10 = d10 / 10
+
+  t = t + 1
+end</code></div></li>
+				
+			</ol>
+			
+			<h3>発展問題</h3>
+			<img class="rfloat" src="swallow.bmp" width="100" height="100" alt="東工大のシンボルマーク">
+			<ol>
+				<li>（調）たとえば，東工大のシンボルマーク（右）は本質的には 1（白）と 0 （黒）の列で表されている．この画像のデータファイル <a href="swallow.bmp">swallow.bmp</a> から，その 1 と 0 の列を取り出してみよう．</li>
+				<li>関係演算子として > だけを用いて，他の関係演算子を使った条件式を表してみよう．たとえば <code>if x != y ...</code> といった if 文をどのように表せばよいだろうか？</li>
+				<li>if 文を while 文（もしできれば while 文の条件式を <code>a > 0</code> という形に限ったもの）のみを使って表してみよう．</li>
+			</ol>
+		
+		</div>
+		
+		<div id="class_footer">
+			<p>本ページ以下の各ページについてのご質問等は	 watanabe (at) is.titech.ac.jp までお願いします</p>
+		</div>
+		
+		<script src="script.js" type="text/javascript"></script>
+	</body>
+</html>

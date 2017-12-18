@@ -1,0 +1,124 @@
+/* Header */
+
+#class_header {
+	width: 100%;
+	background-color: #007070;
+	color: white;
+	margin: 0;
+	padding: 0;
+}
+
+#class_header .title {
+	font-size: 20pt;
+	width: 700px;
+	margin: 0;
+	padding: 5px 10px;
+}
+
+#class_header .jump {
+	font-size: 16pt;
+	text-align: center;
+}
+
+#class_header .jump a {
+	display: block;
+	padding: 3px 5px;
+	color: black;
+	background-color: #efef80;
+	text-decoration: none;
+	outline: solid 2px #000070;
+}
+
+#class_header .jump a:hover {
+	color: white;
+	background-color: #0000cf;
+}
+
+/* Footer */
+
+#class_footer {
+	width: 100%;
+	padding: 10px;
+	background-color: #007070;
+	color: white;
+	text-align: right;
+	clear: both;
+}
+
+#class_footer p {
+	margin: 0;
+	padding: 0;
+	font-size: 10pt;
+}
+
+/* Main */
+
+ol, ul {
+	margin-bottom: 40px;
+}
+
+ol li, ul li {
+	margin-bottom: 20px;
+}
+
+ul.kadai li {
+	font-size: 16pt;
+}
+
+hr {
+	clear: both;
+}
+
+img.rfloat {
+	float: right;
+	margin: 0 0 20px 10px;
+}
+
+div.codebox {
+	margin: 20px 10px;
+	padding: 20px;
+	outline: solid 1px #700000;
+}
+
+.codebox a {
+	cursor: pointer;
+	color: #0000ff;
+	font-weight: bold;
+	display: none;
+}
+
+.codebox code {
+	white-space: pre;
+}
+
+.codebox code.toggle {
+	display: block;
+}
+
+table.align {
+	margin: -20px 0 20px 0;
+	padding: 0;
+}
+
+.align tr, .align td {
+	margin-left: 0;
+	margin-right: 0;
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.align .vsp {
+	height: 15px;
+}
+
+div.term {
+	margin: 20px 10px;
+	padding: 20px;
+	outline: solid 1px #007000;
+}
+
+.term code {
+	display: block;
+	white-space: pre;
+}
+

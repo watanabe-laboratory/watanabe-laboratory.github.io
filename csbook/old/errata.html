@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"> 
+<HTML lang="ja">
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<TITLE>ERRATA: Intro. to Computer Science</TITLE>
+
+<BODY>
+<P>
+訂正のページ：<BR>
+本書の誤りについて報告します．
+新しく気が付いた間違いの順に並べてあります．
+</P>
+
+<P>
+Updated 11/15/02.
+</P>
+
+<HR>
+
+<P>
+以下の間違いは，第２刷では訂正されています．
+</P>
+
+<H3>★重要な間違い★</H3>
+
+<P>
+4. p.138, 問 1.9 の解答例プログラム A.1（指摘者 T. Watanabe, 2/3/02）
+</P>
+
+<P>（誤っている点）</P>
+
+<PRE>
+   program match (string t, p)
+       char a[..], b[..];
+       i <- 1; j <- 1;
+       a <- str_to_char(x); b <- str_to_char(y);
+       while (true) {
+           if (b[j] = 列終端) { return(true); }
+           if (a[i] = 列終端) { return(false); }
+           if (a[i] = b[j]) {
+               i <- i + 1;
+               j <- j + 1;
+           }
+           else {
+               i <- i + 1;         /* ここが誤り? */
+               j <- 1;
+           }
+       }
+   program end.
+</PRE>
+
+<P>（訂正）</P>
+
+<PRE>
+   program match (string t, p)
+       char a[..], b[..];
+       i <- 1; j <- 1;
+       a <- str_to_char(x); b <- str_to_char(y);
+       while (true) {
+           if (b[j] = 列終端) { return(true); }
+           if (a[i] = 列終端) { return(false); }
+           if (a[i] = b[j]) {
+               i <- i + 1;
+               j <- j + 1;
+           }
+           else {
+               i <- i - j + 2;      /* パターンを1つずらす */
+               j <- 1;
+           }
+       }
+   program end.
+</PRE>
+
+<P>
+3. p.139, 問 1.15 の解答例プログラム A.4（指摘者 T. Nagai, 1/11/02）
+</P>
+
+<P>（誤っている点と訂正）</P>
+
+<PRE>
+1: if($1 >= $2) goto 3 は間違い．
+1: if($1 < $2) goto 3 が正しい．
+</PRE>
+
+<P>
+2. p.47 定理 2.1 補足（指摘者 S. Chiba，11/21/01）
+</P>
+
+<P>（誤っている点と訂正）<BR>
+gcd(x,0) = gcd(0,x) = 0 と定義しているが，間違い．
+gcd(x,0) = gcd(0,x) = x が正しい．
+</P>
+
+<P>
+1. p.85 例題 3.1（指摘者 K. Kobayashi，10/3/01）
+</P>
+
+<P>（誤っている点）<BR>
+ここに説明されているのは，ポストの対応問題ではない．この問題自体
+は，簡単に解くことができる．
+</P>
+
+<P>（訂正）</P>
+
+<PRE>
+与えられた文字列の組 P = { (s1,t1), (s2,t2), ..., (sn,tn) }
+に対し，その中から適当な組を選び（2 度以上選ぶことも可）
+並べることで，まったく同じ文字列の組を作ることができるかど
+うかを判定せよ．
+
+例も同様に訂正．たとえば，
+
+   P = { (aba, abaab), (aba, a), (bba, bbaa), (aab, abaab) }
+
+だと，
+
+  (aba, abaab), (aba, a), (bba, bbaa), (aab, abab), (aba, a)
+
+と選べば，各組の左だけで，
+
+  s = aba aba bba aab aba
+
+ができ，右だけでも
+
+  t = abaab a bbaa abab a
+
+となるため等しい列ができる．したがって，P に対しては，ポス
+トの対応問題は Yes である．
+</PRE>
+
+<H3>☆軽微な間違い☆</H3>
+
+<P>
+3. p.28 の 7 行目（指摘者匿名，1/31/02）
+</P>
+
+<P>（誤っている点と訂正）</BR>
+飛ぶ（ジャンプ）することが → 飛ぶ（ジャンプする）ことが
+</P>
+
+<P>
+2. p.21 の 7 行目（指摘者匿名，1/31/02）
+</P>
+
+<P>（誤っている点と訂正）</BR>
+終了する考える → 終了すると考える
+</P>
+
+
+<P>
+1. p.134, p.135 参考文献の番号（指摘者 K. Kobayashi，10/3/01）
+</P>
+
+<P>（誤っている点と訂正）</BR>
+量子計算に触れている文献は [4] ではなく [3]．
+Ｃ言語の文献の説明では，[5] と [6] が逆．
+</P>
+
+</BODY>
+</HTML>
+

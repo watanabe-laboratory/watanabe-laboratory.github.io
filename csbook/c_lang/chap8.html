@@ -1,0 +1,245 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="lecture.css">
+</head><body>
+
+<h1><span class="title">C言語入門</span><br />第 08 章　ファイルへの入出力</h1>
+
+<div class="frame">
+<div>前 2 章では配列と文字列の使い方を説明しました。本章ではファイルからの入出力について説明します。 配列や文字列の理解が前提となりますので、不安がある場合は適宜、前章、前々章を参照してください。</div>
+
+<h2>ファイル内のデータを処理するプログラム</h2>
+
+<blockquote>
+<div>これまで紹介したプログラムでは、処理対象となる入力データは以下の 2 種類でした。
+<ul><li>変数や配列の初期値</li>
+<li>scanf 関数を使いキーボードから入力した値</li>
+</ul>
+どちらの入力データも簡単にプログラム中で扱うことができますが、扱いたい量が大きい場合や頻繁に変更したい場合には使い勝手がよいとはいえません。 大量の入力データを扱うプログラムでは、ファイルからデータを入力したほうが便利です。<br><br></div>
+
+<div>例としてテストの採点を取り上げます。次のような状況を考えてください。
+<ul>
+
+<li>30 名の学生がいるクラスでテストを行い、採点を行った。</li>
+<li>各学生の名前と点数は TSV 形式でファイルに格納した。1 人の学生の名前と点数は 1 行にまとめて次のような順で書かれているとする。</li>
+<pre>《名前》 《国語》 《英語》 《数学》 《物理》 《化学》 《生物》 《地理》 《歴史》</pre>
+</ul></div>
+
+<div>TSV 形式とは Tabular Separated Values の略です。この形式では、ひとかたまりのデータを各行にタブ文字で区切って並べます。例では、1 行ごとに異なる学生の点数データを書きます。それぞれの科目の点数は、1 行の中にタブ文字で区切って並べます。表計算ソフト OpenOffice.org Calc や Microsoft Excel を使っているなら、シートのデータを TSV 形式でファイルに書き出すことができます。
+Excelでは「テキスト（タブ区切り）（*.txt）」を選択すれば TSV 形式で書き出せます。
+<br><br></div>
+
+<div>なお「タブ文字」とは複数の半角スペースとおなじ役割を持つ特殊な文字です。タブ文字を入力するには、キーボード左側にある <span class="cbox">Tab</span> と書かれたキーを
+押してください。なお、半角スペース何文字分を表すのかは表示環境によって異なりますが、多くの場合は半角スペース 4
+文字分とされることが多いようです。もともとは字下げ（インデント）を簡単におこなうために用意されました（半角スペースキーを何度も押すよりも、Tab
+キーを一度押せばすむため）。タブ文字は通常の文書ではほとんど登場しないため、今回のようにデータの区切りを表す文字としても利用されます。たとえば、半角スペースやコンマを区切り文字にした場合、データの中に半角スペースやコンマが登場する場合、区切り文字なのかデータなのかを区別できなくなってしまいます。タブ文字ならば、利用頻度が少ないため、区切り文字に向いているというわけです。
+</div>
+
+<div><p>
+これから作成するプログラムは、上のような TSV 形式のファイルを読み込み、各学生について、以下の情報を計算することにします。
+</p>
+
+<ul>
+<li>全教科の平均点</li>
+<li>全教科中の最高点</li>
+<li>全教科中の最低点</li>
+</ul>
+
+<p>
+計算結果は以下の形式でファイルに書き込むものとします。
+</p>
+
+<pre>《名前》,《平均点》,《最高点》,《最低点》<br></pre></div>
+
+<h3>ファイルを開く、閉じる</h3>
+
+<div>コンピュータ上のファイルは、すべて OS（オペレーティングシステム、Windows や Mac OS
+のこと）が管理しており、ファイルの読み書きをおこなうには OS
+に依頼して代行してもらわなければなりません。C言語プログラムでファイルを扱うときも例外ではなく、そのための手続が必要です。<br><br></div>
+
+<div>C言語プログラムからファイルを扱うときには、まずファイル入出力をおこなう準備を OS に依頼し、該当のファイルを扱うためのチケットのようなものを受け取ります。
+この処理を<span class="word">ファイルを開く（open する）</span>といいます。受け取るチケット（もちろん実際のチケットではなく、概念上のものです）は、FILE* という特別なデータ型の値です。このようなファイル入出力の準備は fopen 関数を呼ぶことで実行します。</div>
+
+<div style="text-align:center">
+<a href="08_fopen.png">
+<img class="fig" src="08_fopen.png"/></a>
+<p>変数 x の値は 5、変数 f の値はファイル result.tsv にアクセスするためのチケット</p>
+</div>
+<div>例えばファイル result.tsv を扱えるようにするために open する（開く）ときは次のように fopen 関数を呼びます。<br></div>
+
+<div><pre class="code">/* ファイルを読み込み用で開く */<br>FILE* f = fopen("result.tsv", "r");<br></pre></div>
+
+<div>fopen 関数の戻り値は FILE* 型ですが、<span class="cbox">*</span> という記号の意味について気になるかもしれません。これについては次章で説明します。今回は FILE* という最後に <span class="cbox">*</span> のついた特別な名前の型である、とだけ理解してください。<br><br></div>
+
+<p>目的のファイルが OS によって書き込み禁止に設定されている場合、そのファイルを書き込みのために開くことはできません。
+しかしそのファイルを読み込みのために開くことはできます。 このため、C言語でファイルを開くときは、そのファイルからデータを読み込むのか、書き込むためなのか、目的を明示的に指定する必要があります。
+これを指定するのが fopen 関数の 2 つめの引数です。上のプログラムでは <code>"r"</code> の部分がそれにあたります。基本的なものを以下の表にまとめます。</p>
+
+<div><table summary="ファイルを開く用途" boarder="1" border="1" cellpadding="4" cellspacing="0" frame="void"><tbody><tr><th>文字列</th><th>ファイルを開く目的</th>
+ </tr>
+ <tr>
+ <td>r</td><td>読み込み</td>
+ </tr>
+ <tr>
+ <td>w</td><td>書き込み（既存の内容はすべて破棄される）</td>
+ </tr>
+ <tr>
+ <td>a<br></td><td>書き込み（ファイルの最後に追記される）</td></tr></tbody></table></div>
+
+<p>ファイルを fopen 関数で開いたら、そのファイルの内容を読み込んだり、新しい内容を書き込んだりすることができます。一方、そのようなファイルの入出力処理が終わったら、それを OS に知らせなければなりません。この操作を<span class="word">ファイルを閉じる（close する）</span>といいます。fclose 関数を呼ぶことで、その操作を実行できます。関数の引数は fopen 関数の戻り値です。この引数によって、どの fopen 関数で開いたファイルを閉じるのか区別します。</p>
+
+<div><pre class="code">/* ファイルを閉じる */<br>fclose(f);<br></pre></div>
+
+<h3>読み込み</h3>
+
+<div>fopen 関数の呼び出しから fclose 関数の呼び出しまでの間は、ファイルの内容を読み込んだり、新しい内容を書き込んだりできます。ファイルの内容を読み込むには、例えば fgets 関数を使います。<span class="word">fgets 関数</span>はファイルから 1 行分（行頭から改行文字まで）のデータを読み込む関数で、以下のように使います。
+</div>
+
+<div><pre class="code">/* 読み込み目的で result.tsv を開く */<br>FILE* f = fopen("result.tsv", "r");<br>char line[256];<br>fgets(line, 256, f);<br>fclose(f);<br></pre></div>
+
+<div>fgets 関数の第 1 引数は、読み込んだ文字列を保存する配列、第 2 引数はその配列の要素数、第 3 引数は 1 行分読みたいファイル、すなわち fopen 関数の戻り値です。これは FILE* 型の値です。例では 2 行目の fopen で開いたファイルから、4 行目の fgets 関数が 1 行分読み込みます。読み込む行は第 2 引数で渡した値より長さ（文字数）が短くなくてはいけません。それより長いと第 1 引数の配列に入りきらなくなるので、プログラムの動作が不安定になります。<br><br></div>
+
+<div>fgets 関数は何度も呼ぶことができます。fopen 関数で開いたファイルに対して fgets 関数を何度も呼ぶと、呼ぶ度にファイルの先頭から 1 行ずつ順に読み込まれます。ファイル中の全ての行を読み込んでそれ以上読み込む行がなくなると、fgets 関数は <span class="word">NULL </span>という特別な定数を戻り値として返します。これを利用すると、ファイルの内容を全て読み込んで画面に表示するプログラムを書くことができます。下のプログラムを見てください。<br></div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br><br>int main() {<br>    FILE* f = fopen("result.txt", "r");<br><br>    char line[256];<br>    while (fgets(line, 256, f) != NULL) {<br>        printf("%s", line);<br>    }<br><br>    fclose(f);<br>    return 0;<br>}<br></pre></div>
+
+<div>fgets 関数は行頭から改行文字（行末）までを第 1 引数の配列に保存します。また文字列の終わりを意味する<a href="/quotes/?c=2&amp;p=7#463">ヌル文字</a>もその配列の末尾に保存されます。保存される場所は改行文字が保存されている要素の次の要素です。<br><br></div>
+
+<div>8 行目の printf 関数の第 1 引数が <code>"%s\n"</code> ではなく <code>"%s"</code> であることに注意してください。前者では、第 2 引数の配列に保存された文字列を表示した後、改行文字 <code>\n</code> を表示します。後者では文字列だけが表示されます。fgets 関数を呼び出した後、配列 line は改行文字を含みますから、前者の <code>"%s\n"</code> では、printf 関数が読み込んだ行の内容を表示した後、2 回改行してしまいます。その結果、全体としてファイルの内容が表示されるものの、行と行の間に空行が 1 行はさまって表示されてしまいます。<br></div>
+
+<h3>TSV 形式の処理</h3>
+
+<div>これでファイルの内容を 1 行ずつ順に取り出すことができるようになりました。次は、TSV 形式になっている各行を処理して、個々の値を取り出します。ここでは sscanf 関数を使います。これは<a href="/quotes/?c=2&amp;p=6#324">第 5 章</a>で説明した scanf 関数に似た関数です。例えば、次のプログラムは、文字列の中に整数値が 1 つだけ含まれているとき、それを取り出して int 型の変数に代入します。</div>
+
+<div><pre class="code">int value;<br>char number[] = "30";<br>sscanf(number, "%d", &amp;value);<br></pre></div>
+
+<div>このプログラム（の一部）を実行すると value の値は 30 となります。配列 number の中身が <code>"30"</code> という文字列だからです。整数値の 30 と文字列の 30 は大きく異なります。実際、配列 number の 0 番目の要素は文字 3 の文字コードの番号、1 番目の要素は文字 0 の文字コードの番号です。sscanf 関数の第 3 引数として渡す変数 value の前には &amp; がついていますが、この &amp; の意味は次章で説明します。本章では、そういうものだ、と理解しておいてください。<br><br></div>
+
+<div>では、sscanf 関数を使って TSV 形式の文字列を処理し、名前と教科ごとの点数を取得するプログラムを示します。</div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br><br>int main() {<br>    char line[] = "taro\t60\t53\t32\t24\t61\t94\t56\t83";<br><br>    char name[256];<br>    int score[8];<br><br>    sscanf(line, "%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",<br>           &amp;name, &amp;score[0], &amp;score[1], &amp;score[2], &amp;score[3], &amp;score[4], &amp;score[5], &amp;score[6], &amp;score[7]);<br><br>    printf("名前:%s\n", name);<br>    printf("国語:%d点 英語:%d点 数学:%d点 物理:%d点\n", score[0], score[1], score[2], score[3]);<br>    printf("化学:%d点 生物:%d点 地理:%d点 歴史:%d点\n", score[4], score[5], score[6], score[7]);<br>    return 0;<br>}<br></pre></div>
+
+<div>sscanf 関数の第 3 引数以降の引数は、全て先頭に &amp; がつきます。プログラムの実行結果は次のようになります。<br></div>
+
+<div><pre class="result">名前:taro<br>国語:60点 英語:53点 数学:32点 物理:24点<br>化学:61点 生物:94点 地理:56点 歴史:83点<br></pre></div>
+
+<div>プログラムの 4 行目と 9 行目の文字列中にはタブ文字 <code>\t</code> が何個も含まれています。<code>\t</code> とあるところは実際にはタブ文字 1 文字です。例えば配列 line の要素は 0 番目から順に、t、a、r、o でその次の 4 番目の要素はタブ文字（の文字コード）です。その次は 6、0 で、その次もタブ文字です。<br><br></div>
+
+<div>Mac OS 上で <span class="cbox">\</span> 記号を入力するには、日本語入力の状態で <span class="cbox">Option</span>+<span class="cbox">¥</span> キーを押します。なお、<span class="cbox">\</span> 記号は Windows
+上では円記号として表示され、Mac 上ではバックスラッシュとして表示されます。これには歴史的な経緯があるので、興味あるかたは<a href="http://ja.wikipedia.org/wiki/%E3%83%90%E3%83%83%E3%82%AF%E3%82%B9%E3%83%A9%E3%83%83%E3%82%B7%E3%83%A5" target="_blank">こちら</a>をご覧ください。</div>
+
+<h3>読み込んだ点数を処理する</h3>
+
+<blockquote>
+<div>ここまでに解説した方法を使うと、TSV 形式のファイルを読み込み、個々の点数を取り出すことができます。次は読み込んだ点数の平均点・最高点・最低点を求めます。以下では、読み込んだ個々の点数は配列の各要素に保存されているとします。</div>
+
+<h4>平均点を求める</h4>
+
+<div>平均点は比較的簡単に求めることができます。
+for 文を使ってすべての点数を合計し、合計値を配列の要素数で割るだけです。
+このとき、平均点は小数点以下も表示したいため、変数のデータ型を整数を表す int 型から浮動小数点数を表す double 型に変更するのがポイントです。
+これは 11 行目で行っているように、変数名の前に変更したいデータ型を括弧で括って書くことで実現できます。
+</div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br><br>int main() {<br>    int score[8] = {60, 53, 32, 24, 61, 94, 56, 83};<br><br>    /* 平均点を求める */<br>    int total = 0;<br>    for (int i = 0; i &lt; 8; i = i + 1) {<br>        total = total + score[i];<br>    }<br>    double average = (double)total / 8;<br><br>    printf("平均値 : %.2f\n", average);<br><br>    return 0;<br>}<br></pre></div>
+
+<div>実行結果はつぎのようになります。<br></div>
+
+<div><pre class="result">平均値 : 57.88<br></pre></div>
+
+<h4>点数順に科目を並べる</h4>
+
+<div>次に各人の教科の中の最高点と最低点を求めます。もっと簡単な求め方もありますが、ここではあえて各教科の点数を大きい順に並べてみて、最初の教科を最高点、最後の教科を最低点とする方法をとります。<br><br></div>
+
+<div>配列の数値を大きな順もしくは小さな順に並べ替える処理のことを<span class="word">ソート（sort）</span>と呼びます。ソートの方法は、効率や制限などからさまざまな手法が知られています。今回はその中で非効率ながらもっとも単純な<span class="word">バブルソート</span>という手法を紹介します。
+</div>
+
+<div><p>
+バブルソートの方法はとてもシンプルです。
+ここではバブルソートで大きな値から順に（これを<span class="word">降順</span>と呼びます）並べ替えることを考えます。
+</p>
+
+<ol><li>注目している配列の要素 a とその次の要素 b を比べる</li><li>要素 a よりも要素 b が大きい場合、各要素の示す値を入れ替える</li><li>1 〜 2 の処理を全配列の要素（最後の要素をのぞく）で実施する</li><li>1 〜 3 の処理を配列の要素数分繰り返す</li></ol>
+
+<p>
+バブルソートをおこなうプログラムを以下に示します。
+</p></div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br><br>/* 配列を表示する */<br>void printScore(int score[], int size) {<br>    for (int i = 0; i &lt; size; i = i + 1) {<br>        printf("%d ", score[i]);<br>    }<br>    printf("\n");<br>}<br><br>int main() {<br>    int score[] = {60, 53, 32, 24, 61, 94, 56, 83};<br>    int size = sizeof(score) / sizeof(score[0]);  /* 配列の要素数を計算 */<br><br>    /* 並べ替え前の配列を表示する */<br>    printScore(score, size);<br><br>    /* 点数の高い順に並べる */<br><br>    /* 3. 配列の要素数文繰り返す */<br>    for (int i = 0; i &lt; size; i = i + 1) {<br><br>        /* 2. 全配列の要素(最後の要素をのぞく)で実施する */<br>        for (int j = 0; j &lt; size - 1; j = j + 1) {<br><br>            /* 1. 要素aよりも要素bが大きい場合、各要素の示す値を入れ替える */<br>            if (score[j] &lt; score[j+1]) {<br>                int lesser  = score[j];<br>                int greater = score[j+1];<br>                score[j]   = greater;<br>                score[j+1] = lesser;<br>            }<br>        }<br>    }<br><br>    /* 並べ替え後の配列を表示する */<br>    printScore(score, size);<br><br>    return 0;<br>}<br></pre></div>
+
+<div>13 行目の<pre>int size = sizeof(score) / sizeof(score[0]);<br></pre>は、C言語で配列の要素数を計算するのによく使われる技法です。変数 size の値は 8 となります。sizeof は特別な演算子で変数がメモリ上で占める大きさを計算します。上の例で score と書いてあるところを別な配列名で置き換えると、その配列の要素数が変数 size の値になります。<br><br></div>
+
+<div>実行結果を示します。配列 score の 8 個の要素が並べ替えの前後でどう変わったか表示されます。</div>
+
+<div><pre class="result">60 53 32 24 61 94 56 83<br>94 83 61 60 56 53 32 24<br></pre></div>
+
+</blockquote>
+<h3>ファイルへの書き込み</h3>
+
+<div>ファイルへの書き込みをおこなうため、fprintf 関数の使い方を説明します。この関数は fopen&nbsp; 関数で開いた状態のファイルへ文字列を書き込みます。使い方は printf 関数に似ています。<br></div>
+
+<div><pre class="code">/* 書き込み用に summary.txt を開く */<br>FILE* f = fopen("summary.txt", "w");<br><br>char name[] = "taro";<br>double average = 57.88;<br>int max = 94;<br>int min = 24;<br><br>fprintf(f, "%s, %f, %d, %d\n", name, average, max, min);<br><br>fclose(f);<br></pre></div>
+
+<div>fprintf 関数は第 1 引数が FILE* 型の値であることを除けば、printf 関数と使い方は同じです。<code>%s</code> や <code>%d</code> といった部分が第 3 引数以降の値で置き換わります。末尾に <code>\n</code> があるので、改行文字も一緒にファイルに書き込まれます。したがって上のプログラムはファイル summary.txt に一行書き込んで終了することになります。<br><br></div>
+
+<div>これで、ファイルの読み込みに続いて、書き込みもできるようになりました。この二つの処理を組み合わせれば、「ファイルを 1 行ずつ読み込み、その行を 1 行ずつファイルへ書き込む」という処理ができるようになります。
+これはファイルの内容をコピーをすることに他なりません。ファイルのコピーをおこなうプログラムを以下に示します。
+</div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br><br>int main() {<br>    FILE* f = fopen("result.txt",  "r");<br>    FILE* g = fopen("summary.txt", "w");<br><br>    char line[256];<br>    while (fgets(line, 256, f) != NULL) {<br>        fprintf(g, "%s", line);<br>    }<br><br>    fclose(f);<br>    fclose(g);<br>    return 0;<br>}<br></pre></div>
+
+<div>このプログラムを実行すると、summary.txt という名前のファイルが新しく作成されます。このファイルが result.txt と同じ内容になっていることを確認してください。<br><br>
+</div>
+
+<div>9 行目の fprintf 関数の第 2 引数には <code>%s</code> の後ろに改行文字 <code>\n</code> が含まれていません。これは 8 行目の fgets 関数を実行して配列 line に保存された文字列が、末尾に既に改行文字を含んでいるからです。<code>%s</code> は配列の中身を全てファイルの中に書き込むことを意味しますから、末尾の改行文字も書き込まれます。fprintf 関数の引数を <code>"%s\n"</code> とすると、コピーされたファイルの中身をエディタ等で見たとき、元のファイルの内容が 1 行ずつ間をあけて表示されてしまいます。</div>
+
+</blockquote>
+<h2>演習 8−1</h2>
+
+<blockquote>
+<div><p>
+ここまでで説明したプログラムを組み合わせて、以下の処理をおこなうプログラムを作成してください。30 名の生徒がいるクラスで、テストを行い、採点を行いました。各学生の名前と点数は以下のような形式で TSV 形式のファイルに格納されています。 </p>
+<blockquote><pre>《名前》 《国語》 《英語》 《数学》 《物理》 《化学》 《生物》 《地理》 《歴史》</pre></blockquote></div>
+
+<div><p>
+TSV 形式のファイルを読み込み、各学生について、以下の集計結果を計算するプログラムを作成してください。 <br>
+</p>
+
+<ul><li>全教科の平均点</li><li>全教科中の最高点</li><li>全教科中の最低点</li></ul>
+
+<p>
+計算結果は以下の形式でファイルに書き込むものとします。
+</p>
+
+<blockquote><pre class="syntax">《名前》,《平均点》,《最高点》,《最低点》<br></pre></blockquote></div>
+
+<div><p>
+読み込むTSV形式のファイルの中身は以下の通りです。(空白部分はタブ文字と考えてください。)
+</p>
+
+<pre>tanimoto	60	53	32	24	61	94	56	83<br>matumura	89	93	34	63	78	55	78	67<br>nakano	53	31	35	77	61	33	41	30<br>obata	90	28	73	76	34	97	43	98<br>murata	77	32	31	27	98	74	74	47<br>yamasaki	30	31	23	68	76	84	32	97<br>katumoto	97	97	31	49	68	97	48	78<br>sakai	37	44	77	46	43	97	94	68<br>ishida	77	89	24	65	27	47	54	65<br>saito	76	32	68	76	32	65	49	87<br></pre></div>
+
+<div>なお、このファイルを作成する方法については<a href="http://www.csg.is.titech.ac.jp/%7Echiba/lecture/clang/tools/text_file.html">資料</a>を見て下さい。<br></div>
+
+</blockquote>
+<h2>演習 8−2</h2>
+
+<blockquote>
+<div>演習 8−1のプログラムを改良して以下の情報を計算し、ファイルの最後に書き込むようにしてください。
+
+
+<ul>
+<li>全学生の全教科の平均点</li>
+<li>全学生の全教科中の最高点</li>
+<li>全学生の全教科中の最低点</li>
+</ul></div>
+
+</blockquote>
+
+</div>
+
+<p><a href="index.html">目次</a></p>
+
+<p class="footnote"><br/>Copyright 2009-2011 the Compview project,
+Tokyo Institute of Technology.  All rights reserved.</p>
+</body></html>

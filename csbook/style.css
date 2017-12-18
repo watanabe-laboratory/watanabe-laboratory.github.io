@@ -1,0 +1,191 @@
+body {
+	width: 960px;
+	font-family: sans-serif;
+	font-size: 12pt;
+}
+
+/* Header */
+
+#header {
+	width: 100%;
+	height: 170px;
+	background-color: #0000af;
+	color: white;
+	margin: 0;
+	padding: 0;
+}
+
+#header .title {
+	font-size: 32pt;
+	margin: 0;
+	padding: 15px 0 0 0;
+}
+
+#header .subtitle {
+	font-size: 20pt;
+	margin: 0 0 8px 400px;
+	padding: 0;
+}
+
+#header .series {
+	font-size: 16pt;
+	margin: 0 0 0 600px;
+	padding: 0;
+}
+
+#header .text_box {
+	padding: 3px 0 3px 3px;
+	color: black;
+	background-color: white;
+}
+
+#header .logo {
+	float: left;
+	margin-right: 20px;
+}
+
+#header .body {
+	height: 100px;
+}
+
+/* Menu */
+#menu {
+	width: 100%;
+	height: 40px;
+	margin: 0;
+	padding: 0;
+	font-size: 14pt;
+}
+
+#menu tr {
+	margin: 0;
+	padding: 0;
+}
+
+#menu td.button {
+	width: 240px;
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+
+#menu td.glue {
+	background-color: #7070ff;
+}
+
+#menu a {
+	display: block;
+	text-decoration: none;
+	color: white;
+	background-color: #7070ff;
+	text-align: center;
+	vertical-align: middle;
+	padding: 18px 0 18px 0;
+	font-size: 18pt;
+}
+
+#menu a:hover {
+	background-color: #ff0000;
+}
+
+#menu div.now {
+	text-align: center;
+	vertical-align: middle;
+	font-size: 18pt;
+	background-color: white;
+	color: black;
+	font-weight: bold;
+}
+
+#menu a.now {
+	background-color: white;
+	color: black;
+	font-weight: bold;
+}
+
+/* Main */
+
+#main {
+	color: black;
+	padding: 0 20px 10px;
+}
+
+p.welcome {
+	font-size: 30pt;
+	font-weight: bold;
+	text-align: center;
+}
+
+#main a {
+	text-decoration: none;
+}
+
+div.box {
+	border: solid 2px #707070;
+	margin: 20px;
+	padding: 0 20px;
+}
+
+ul.menu, ul.links a {
+	font-size: 16pt;
+}
+
+ul.menu li, ul.links li, ul.links li ul li {
+	margin-bottom: 10pt;
+}
+
+ul.menu, ul.outline, .outline ul, ul.links, ul.links li ul {
+	list-style-type: none;
+}
+
+ul.links {
+	margin-left: 0;
+	padding-left: 0;
+}
+
+ul.links p {
+	font-size: 16pt;
+	font-weight: bold;
+	margin: 10px 0;
+	padding: 0;
+}
+
+p.supp {
+	font-size: 10pt;
+}
+
+p.back_to_menu {
+	font-size: 16pt;
+	text-align: center;
+}
+
+span.nowrap {
+	white-space: nowrap;
+}
+
+#share {
+	margin: 0;
+	padding: 0;
+}
+
+#share li {
+	display: inline-block;
+}
+
+/* Footer */
+
+#footer {
+	width: 100%;
+	padding: 10px;
+	background-color: #0000af;
+	color: white;
+	text-align: right;
+	clear: both;
+}
+
+#footer p {
+	margin: 0;
+	padding: 0;
+	font-size: 10pt;
+}
+

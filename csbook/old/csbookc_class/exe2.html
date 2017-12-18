@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="stylesheet" type="text/css" href="../style.css" />
+		<link rel="stylesheet" type="text/css" href="style.css" />
+		<title>課題１のための練習・演習</title>
+	</head>
+   
+	<body>
+		<div id="class_header">
+			<table class="body">
+				<tr>
+					<td class="title">課題２に関連した講義や演習のための練習問題，演習問題<br />
+対象クラス (CS1a, CS1b, CS4a, CS5b, CS5c)</td>
+				<td class="jump"><a href="../class.html">本のページに戻る</a><a href="http://www.is.titech.ac.jp/~kashima/ComputerScience.html">授業のページに戻る</a>
+				<td>
+				</tr>
+			</table>
+			</div>
+			
+		<div id="main">
+			<h2>課題２に関連した講義や演習のための練習問題，演習問題</h2>
+			
+			<table class="align">
+				<tr><td>練習問題＝</td><td>自分で練習したり考えたりするための問題</td><tr>
+　　　　　<tr><td></td><td>※期末試験にも出る可能性のある問題</td></tr>
+　　　　　<tr class="vsp"></tr>
+				
+				<tr><td>演習問題＝</td><td>演習で教材として使う可能性のある問題</td>
+　　　　　<tr><td></td><td>※演習問題のみ答えを付ける</td></tr>
+　　　　　<tr class="vsp"></tr>
+				
+				<tr><td>発展課題＝</td><td>少し難しい問題，興味のある人に</td></tr>
+				<tr class="vsp"></tr>
+			</table>
+			
+			<table class="align">
+				<tr><td>（調）＝</td><td>文献などを調べることが主な問題</td></tr>
+				<tr><td>（考）＝</td><td>自分で考えることが主な問題←デフォルトはこちらなのであえてこの印はつけない</td></tr>
+			</table>
+			
+			<h3>練習問題</h3>
+			<ol>
+				<li>（調）仮名漢字はコンピュータの中で，どのように 2 進列で表わされているかを調べてみよう．</li>
+				
+				<li>いろいろな「仕事」を関数の形で表わしてみよう．たとえば，自動ドアの制御をするには，どんな関数が必要だろうか？ゲームソフトを作るには？さらには，株の投資家へのアドバイスソフトを作るには？などなど．ここで重要なのは，どうやって計算するか？は取り敢えずおいておいて，何から何を求めればよいのか，という目標を決めること．まずは，その目標（要求仕様ともいう）を決めることを考えてみよう．</li>
+				
+				<li>次に示すのは，入力として（1 行に）与えられる整数を配列に収め，その後に，その最大値を求めるプログラムである．これを完成させよ．
+				<div class="codebox"><code># max.rb
+# データの入力
+a = gets().split.map(&:to_i)
+n = a.length
+# 以下が計算部分
+max = -10000    #　マイナス無限大と言える数
+maxj = -1
+for  j  in 0..(n-1)
+   # ここを埋める（数行）
+end
+puts(max, maxj)</code></div></li>
+
+				<li>次に示すのは，入力として与えられる文字列に対し，その文字列中の英小文字とその ASCII によるコードを画面に出すプログラムである．これを完成させよ．
+				<div class="codebox"><code># abcPrint.rb
+# 定数の準備
+code_a = 97              # 文字 a の文字コード
+code_z = 122             # 文字 z の文字コード 97 + (26 - 1)
+# データの入力
+puts("文字列を入力しよう")
+ss = gets().chomp
+aa = ss.unpack("C*")
+leng = ss.length
+# 以下が計算の部分
+for i in 0..(leng-1)
+   if # ここを埋める
+      print(ss[i], " --> ", aa[i], "¥n")
+   end
+end</code></div></li>
+
+				<li>次の演習問題 5 で作ったヒストグラムのプログラムを実行したところ，最も得点の高い区間を表す最後の 3 行のヒストグラムが以下のようにとなった．つまり，最高得点の区間の人数が少なかった．けれどもこのテストでは満点の人が一番多かったのだ．なぜ，このような現象が起きたのだろうか？
+				<div class="term"><code>> ruby hgraph.rb < tensu.txt
+
+...（中略）
+
+1888888888888888
+18888888888888888
+1888888</code></div></li>
+			</ol>
+			
+			<h3>演習問題</h3>
+			<ol>
+				<li>入力として（1 行に）与えられる整数を配列に収め，その後に，その平均を求めるプログラムを作ってみよう．（平均は整数切り捨てでもよい．）
+				<div class="codebox" id = "code1"><a onClick="code_toggle(1)">コードを表示する</a><code class="toggle"># ave.rb
+# 入力: 整数の列
+# 出力: 平均値
+
+a = gets().split.map(&:to_i)
+n = a.length
+# 以下が総和の計算部分
+sum = 0
+for i in 0..(n-1)
+  sum = sum + a[i]
+end
+ave = sum.to_f / n.to_f
+# 補足説明：整数変数.to_f で小数扱い（浮動小数点型という）になる
+# 　浮動小数点型の数同士の計算結果は浮動小数点型となる
+# 　右辺が浮動小数点型なので，代入される変数 ave は浮動小数点型の変数となる
+puts(ave)</code></div></li>
+
+				<li>入力として，1 行ずつ与えられる正の数を配列に収め，その後に，その平均を求めるプログラムを作ってみよう．データの個数はあらかじめわかっていない（ただし，100 個以下と仮定してよい）．入力の終わりは -1 を与えることにする．（平均は整数切り捨てでもよい．）
+				<div class="codebox" id = "code2"><a onClick="code_toggle(2)">コードを表示する</a><code class="toggle"># aveline.rb
+# 入力: 整数の列を改行で区切ってたもの
+# 出力: 平均値
+
+# 正整数の入力
+a = Array.new(100)   # 一応，100 個の配列を取っておく
+n = 0
+stop = 0
+while stop == 0
+  x = gets().to_i
+  if x == -1
+    stop = 1
+  end
+  a[n] = x           # ここと
+  n = n + 1          # ここの 2 行の順番も大切！なぜだろう？逆にすると．．．
+end
+
+# 以下が総和の計算部分
+sum = 0
+for i in 0..(n-1)
+  print(a[i], " ")   # 確認のため画面に出す
+  sum = sum + a[i]
+end
+ave = sum.to_f / n.to_f
+puts(ave)</code></div></li>
+				
+				<li>あるクラスで行ったテストの合格点（60 点）以上の学生の人数分布を 5 点刻みで数えたい．そのためのプログラムを作ってみよう．点数のデータは（1 行）に与えらえるものとする．
+				<div class="codebox" id = "code3"><a onClick="code_toggle(3)">コードを表示する</a><code class="toggle"># bunpu.rb
+# 入力: 点数の列
+# 出力: 人数分布配列（5 点刻み）
+
+# 定数設定
+kizami = 5
+saitei = 60
+kosuu = (100 - saitei) / kizami + 1
+hindo = Array.new(kosuu, 0)
+# データ入力
+d = gets().split.map(&:to_i)
+n = d.length
+# 以下が計算部分
+for i in 0..(n-1)
+  sa = d[i] - saitei
+  if sa >= 0
+    j = sa / kizami
+    print(j, ",", sa, "¥n")
+  end
+end
+print(hindo, "¥n")    # 配列をわかりやすく表示する方法</code></div></li>
+
+				<li>上記の人数分布をヒストグラムの形で表示したい．そのために，たとえば，3 人だったら，1888，7 人だったら 18888888 というように，与えられた数 m の個数分だけ 1 の後ろに 8 を付けた数を求めるサブルーチン bar8(m) を定義してみよう．
+				<div class="codebox" id = "code4"><a onClick="code_toggle(4)">コードを表示する</a><code class="toggle"># サブルーチン bar8 定義
+# bar8(自然数 m) = 188...8 （m 個の 8の列）
+def bar8(m)
+  out = 1
+  for i in 0..(m-1)
+    out = out * 10 + 8
+  end
+  return(out)
+end</code></div></li>
+
+				<li>上の問 3, 4 で作ったものを合わせて，ヒストグラムを表示するプログラムを作ってみよう．
+				<div class="codebox" id = "code5"><a onClick="code_toggle(5)">コードを表示する</a><code class="toggle"># hgraph.rb
+# 入力: 点数の列
+# 出力: 人数分布配列（5 点刻み）とそのヒストグラム
+
+# サブルーチン bar8 定義
+# bar8(自然数 m) = 188...8 （m 個の 8の列）
+def bar8(m)
+  out = 1
+  for i in 0..(m-1)
+    out = out * 10 + 8
+  end
+  return(out)
+end
+
+# 定数設定
+kizami = 5
+saitei = 60
+kosuu = (100 - saitei) / kizami + 1
+hindo = Array.new(kosuu, 0)
+# データ入力
+d = gets().split.map(&:to_i)
+n = d.length
+# 以下が計算部分
+for i in 0..(n-1)
+  sa = d[i] - saitei
+  if sa >= 0
+    j = sa / kizami
+    hindo[j] = hindo[j] + 1
+  end
+end
+# 出力
+print(hindo, "¥n")
+for j in 0..(kosuu-1)
+  puts( bar8(hindo[j]) )
+end</code></div></li>
+				
+				<li>問 4 では課題１のように数字を使って図を表現していたが，もっと自然に文字列を使って表現することもできる．たとえば，与えられた m に対して，たとえば I*** のように，I（これは境目の印）の後ろに * を m 個続けた文字列を求めるサブルーチン bar(m) を定義してみよう．
+				<div class="codebox" id = "code6"><a onClick="code_toggle(6)">コードを表示する</a><code class="toggle"># サブルーチン bar 定義
+# bar(自然数 m) = I**...* （m 個の *の列）
+def bar(m)
+  out = "I" 
+  for i in 0..(m-1)
+    out = out + "*"
+  end
+  return(out)
+end</code></div></li>
+
+			</ol>
+			
+			<h3>発展問題</h3>
+			<ol>
+				<li>配列も究極的には 1 つの数として表すことができる．たとえば，5 個の要素からなる自然数の配列 a をどのように表すことができるか考えてみよう．また，その中から添え字 i に位置する値 a[i] を得るにはどういう計算をすればよいかを考えてみよう．</li>
+				
+				<li>上の問題の続き．考えた表し方の下で a[i] に新しい数を格納する方法も考えよう．</li>
+				
+				<li>さらに続き．今考えた方法で，配列の要素を増やしたり減らしたりすることができるだろうか？もしできるならばその方法を，できないならば，配列の個数の変化ができる補法を考えてみよう．</li>
+				
+				<li>（調）比較的最近に開発された秘密鍵暗号としては DES が有名である．その原理を調べてみよう．単純なシーザー暗号とはどこが違うのだろうか？</li>
+				
+				<li>（調）公開鍵暗号としては，RSA 暗号が有名である．その原理を調べてみよう．</li>
+			</ol>
+		
+		</div>
+		
+		<div id="class_footer">
+			<p>本ページ以下の各ページについてのご質問等は	 watanabe (at) is.titech.ac.jp までお願いします</p>
+		</div>
+		
+		<script src="script.js" type="text/javascript"></script>
+	</body>
+</html>

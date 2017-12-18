@@ -1,0 +1,166 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="lecture.css">
+</head><body>
+
+<h1><span class="title">C言語入門</span><br />第 12 章　プログラムの分割</h1>
+
+<div class="frame">
+<div>本章では、行列演算をおこなう関数を書きながら、それを例に、プログラムをいくつかのソースファイルに分割する方法について説明します。</div>
+
+<h2>行列演算</h2>
+
+<blockquote>
+<div>まずは行列演算に必要な構造体や関数を書いてゆきます。</div>
+
+<h3>行列を表す構造体</h3>
+
+<div><p>まずは行列を表す構造体を宣言します。行列の要素を保存するためには多次元配列を利用します。</p></div>
+
+<div><pre class=code>/* 行列を管理する構造体 */
+struct matrix {
+    int row;   /* 行方向の要素数。現在は 3 に固定 */
+    int col;   /* 列方向 (column) の要素数。現在は 3 に固定 */
+    int data[3][3]; /* 行列の各要素 */
+};</pre></div>
+
+<div><p>行列の大きさは様々なので、この matrix 構造体で任意の大きさの行列を表せるようにするには、構造体の中に「行方向の要素数」や「列方向の要素数」の値をメンバとして含める必要があります。ただし、本当に任意の大きさの行列を表せるようにするには、data メンバも 3 x 3 の配列に固定するのではなく、行列の大きさに応じて変えられるようにしなければなりません。しかしながら、それは少々難しいので、以下では行列の大きさは 3 x 3 に固定し、将来の拡張のために row と col だけ構造体に加えることにします。</p></div>
+
+<h3>typedef 指定子で型名に別な名前をつける</h3>
+
+<div>せっかく宣言した構造体ですが、この構造体の型名は struct matrix です。2 語からなる少し長い名前なので、毎回、この構造体型の変数や引数を宣言するたびに struct matrix と書くのは少々面倒です。そのような場合、typedef を使うとが便利です。これを使うと、struct matrix という型名に、短い別名をつけることができます。例えば下の例では、int 型に day、struct matrix 型に Matrix という別名をつけています。int 型に day という別名をつけても、3 文字で変わりませんが、その型の値が何であるかを明確にするため、day のような別名をつけることがよくあります。<br></div>
+
+<div><pre>typedef int day;
+typedef struct matrix Matrix;
+</pre></div>
+
+<div>typedef に続けて、本来の型名、次に新しくつける別名、最後にセミコロン ; という順に書きます。なお、typedef で構造体型に別名をつける場合、元の構造体を宣言した後でないと、typedef で別名をつけることはできません。typedef でつけた別名は、元の型名とまったく同じようにプログラム中で用いることができます。次のプログラム例を見てください。<br></div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br><br>struct matrix {<br>    int row;            /* 行方向の要素数。現在は3に固定 */<br>    int col;            /* 列方向（column）の要素数。現在は3に固定 */<br>    int data[3][3];   /* 行列の各要素 */<br>};<br><br>/* 別名をつける */<br>typedef struct matrix Matrix;<br><br>int main()<br>{<br>    // 下の2行で宣言する変数はどちらも同じデータ型<br>    struct matrix mat1;<br>    Matrix        mat2;<br><br>    // 2つの型の大きさは同一<br>    printf("sizeof(struct matrix) = %d\n", sizeof(struct matrix));<br>    printf("sizeof(Matrix)        = %d\n", sizeof(Matrix));<br><br>    return 0;<br>}<br></pre></div>
+
+<h3>行列を初期化する関数</h3>
+
+<div>次に行列を表す構造体の各メンバに初期値を代入する関数を書きます。このような関数を構造体を初期化する関数といいます。今回の例の場合、具体的には、行列の大きさを 3 x 3 にし、各要素の値を 0 にすることにします。<br></div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br><br>struct matrix {<br>  int row;         /* 行方向の要素数。現在は3に固定 */<br>  int col;         /* 列方向（column）の要素数。現在は3に固定 */<br>  int data[3][3];  /* 行列の各要素 */<br>};<br><br>typedef struct matrix Matrix;<br><br>/* 行列を初期化する */<br>void init_matrix(Matrix* entry) {<br>    entry-&gt;row = 3;<br>    entry-&gt;col = 3;<br><br>    for (int i = 0; i &lt; entry-&gt;row; i = i + 1) {<br>        for (int j = 0; j &lt; entry-&gt;col; j = j + 1) {<br>            entry-&gt;data[i][j] = 0;<br>        }<br>    }<br>}<br><br>int main()<br>{<br>    Matrix mat;<br><br>    /* 初期化 */<br>    init_matrix(&amp;mat);<br><br>    printf("%d, %d\n", mat.row, mat.col);<br><br>    return 0;<br>}<br></pre></div>
+
+<div>関数 init_matrix が今回追加した初期化のための関数です。<br></div>
+
+<h3>行列を表示する関数</h3>
+
+<div>さらに行列の要素を表示する関数も追加します。print_matrix 関数です。<br></div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br><br>struct matrix {<br>  int row;         /* 行方向の要素数。現在は3に固定 */<br>  int col;         /* 列方向（column）の要素数。現在は3に固定 */<br>  int data[3][3];  /* 行列の各要素 */<br>};<br><br>typedef struct matrix Matrix;<br><br>/* 行列を初期化する */<br>void init_matrix(Matrix* entry) {<br>    entry-&gt;row = 3;<br>    entry-&gt;col = 3;<br><br>    for (int i = 0; i &lt; entry-&gt;row; i = i + 1) {<br>        for (int j = 0; j &lt; entry-&gt;col; j = j + 1) {<br>            entry-&gt;data[i][j] = 0;<br>        }<br>    }<br>}<br><br>/* 行列を表示する */<br>void print_matrix(Matrix* entry) {<br>    for (int i = 0; i &lt; entry-&gt;row; i = i + 1) {<br>        for (int j = 0; j &lt; entry-&gt;col; j = j + 1) {<br>            printf("%d ", entry-&gt;data[i][j]);<br>        }<br>        printf("\n");<br>    }<br>    /* 行列の終わりであることを示すため空行を入れる */<br>    printf("\n");<br>}<br><br>int main()<br>{<br>    Matrix mat;<br><br>    /* 初期化 */<br>    init_matrix(&amp;mat);<br><br>    /* 表示 */<br>    print_matrix(&amp;mat);<br><br>    /* 対角成分に1を入れて単位行列にする */<br>    mat.data[0][0] = 1;<br>    mat.data[1][1] = 1;<br>    mat.data[2][2] = 1;<br><br>    /* 表示 */<br>    print_matrix(&amp;mat);<br><br>    return 0;<br>}<br><br></pre></div>
+
+<div>実行すると次のようになります。<br></div>
+
+<div><pre class="result">0 0 0<br>0 0 0<br>0 0 0<br><br>1 0 0<br>0 1 0<br>0 0 1<br></pre></div>
+
+<h3>行列の加算をおこなう関数</h3>
+
+<div>最後に行列と行列の加算をおこなう関数を書きます。この関数 add_matrix は、行列をさすポインタを 2 つ引数に受け取り、それらがさす 2 つの行列の加算を実行、計算結果を 1 番目の引数のポインタがさす行列（を表す構造体）に代入します。<br></div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br><br>struct matrix {<br>  int row;         /* 行方向の要素数。現在は3に固定 */<br>  int col;         /* 列方向（column）の要素数。現在は3に固定 */<br>  int data[3][3];  /* 行列の各要素 */<br>};<br><br>typedef struct matrix Matrix;<br><br>/* 行列を初期化する */<br>void init_matrix(Matrix* entry) {<br>    entry-&gt;row = 3;<br>    entry-&gt;col = 3;<br><br>    for (int i = 0; i &lt; entry-&gt;row; i = i + 1) {<br>        for (int j = 0; j &lt; entry-&gt;col; j = j + 1) {<br>            entry-&gt;data[i][j] = 0;<br>        }<br>    }<br>}<br><br>/* 行列を表示する */<br>void print_matrix(Matrix* entry) {<br>    for (int i = 0; i &lt; entry-&gt;row; i = i + 1) {<br>        for (int j = 0; j &lt; entry-&gt;col; j = j + 1) {<br>            printf("%d ", entry-&gt;data[i][j]);<br>        }<br>        printf("\n");<br>    }<br>    /* 行列の終わりであることを示すため空行を入れる */<br>    printf("\n");<br>}<br><br>/* 行列の加算 */<br>void add_matrix(Matrix* mat1, Matrix* mat2) {<br>    for (int i = 0; i &lt; mat1-&gt;row; i = i + 1) {<br>        for (int j = 0; j &lt; mat1-&gt;col; j = j + 1) {<br>            mat1-&gt;data[i][j] = mat1-&gt;data[i][j] + mat2-&gt;data[i][j];<br>        }<br>    }<br>}<br><br>int main()<br>{<br>    Matrix mat1, mat2;<br><br>    /* 初期化 */<br>    init_matrix(&amp;mat1);<br>    init_matrix(&amp;mat2);<br><br>    /* 対角成分に1を入れて単位行列にする */<br>    mat1.data[0][0] = 1;<br>    mat1.data[1][1] = 1;<br>    mat1.data[2][2] = 1;<br><br>    /* 1行目のすべての要素に5を入れる */<br>    mat2.data[0][0] = 5;<br>    mat2.data[0][1] = 5;<br>    mat2.data[0][2] = 5;<br><br>    /* 表示 */<br>    print_matrix(&amp;mat1);<br>    printf("  +  \n\n");<br>    print_matrix(&amp;mat2);<br><br>    /* 加算 */<br>    add_matrix(&amp;mat1, &amp;mat2);<br><br>    /* 表示 */<br>    printf("  =  \n\n");<br>    print_matrix(&amp;mat1);<br><br>    return 0;<br>}<br><br></pre></div>
+
+<div>このプログラムの実行結果も示します。<br></div>
+
+<div><pre class="result">1 0 0<br>0 1 0<br>0 0 1<br><br>  +<br><br>5 5 5<br>0 0 0<br>0 0 0<br><br>  =<br><br>6 5 5<br>0 1 0<br>0 0 1<br></pre></div>
+
+<h3>演習 12−1</h3>
+
+<p>加算をおこなう add_matrix 関数を参考に、2 つの行列の間で減算をおこなう sub_matrix 関数を書いてください。またテストのため、下の計算をするプログラムを sub_matrix 関数を使って書いてください。</p>
+
+<div style="text-align:center">
+<a href="12_eq01.png">
+<img class="fig" src="12_eq01.png"/></a>
+<p>行列の間の減算</p>
+</div>
+<h3>演習 12−2</h3>
+
+<p>加算をおこなう add_matrix 関数を参考に、2 つの行列の間で乗算をおこなう mul_matrix 関数を書いてください。またテストのため、下の計算をするプログラムを mul_matrix 関数を使って書いてください。</p>
+
+<div style="text-align:center">
+<a href="12_eq02.png">
+<img class="fig" src="12_eq02.png"/></a>
+<p>行列の間の乗算</p>
+</div>
+</blockquote>
+<h2>ソースファイルの分割</h2>
+
+<blockquote>
+<div>演習 12−2 までで行列演算のための基本的な関数が用意できました。せっかく作成した関数ですから、他のプログラムでも利用したくなります。一番簡単な方法は、構造体や関数の宣言部分（上のプログラムであれば、main 関数の宣言以外すべて）を、新しく書く他のプログラムにコピーしてしまうことです。しかしプログラムのコピーはよい方法ではありません。例えば、関数の宣言に誤りがあることが後でわかったとします。その関数をコピーして、あちこちのプログラムで使っていたとすると、それらのプログラムを全て探し出して、それぞれ誤りを修正しなければなりません。とても煩雑な作業で、全て修正をほどこしたつもりでも修正もれがありそうです。<br><br></div>
+
+<div>プログラムをいくつかのファイルに分割して保存すればこの問題を回避できます。つまり、<a href="/quotes/?c=2&amp;p=2#22">ソースファイル</a>を分割すればよいのです。そうすると、新しいプログラムを書くときには、再利用したい関数の宣言（ソースコード）が保存されたソースファイルをいくつか選び、足りない関数を新しく書き足して別なソースファイルに保存するだけでプログラミングが終了します。再利用する関数のソースコードをいちいちコピーしないので、関数の宣言に誤りが見つかった場合でも、それを含むソースファイル 1 つを修正するだけですみます。<br></div>
+
+<h3>ヘッダーファイル</h3>
+
+<div>ソースファイルを分割するときは、プログラムをただいくつかのファイルに分割して保存するだけでは不十分です。分割された各ソースファイルごとに、<span class="word">ヘッダファイル（header file）</span> と呼ばれるファイルを用意する必要があります。ヘッダファイルは、あるファイルの中の関数から、別のファイルに保存されている関数を呼び出すとき使います。<br><br></div>
+
+<div>ヘッダファイルの名前の末尾は一般に、C言語プログラムを表す .c ではなく .h です。このファイルの中には、対応するソースファイルの中で宣言されている構造体や関数のうち、他のファイルからも利用されるものに関する情報を書きます。利用されるのが構造体なら、それまでソースファイルの中に書いてきた構造体の宣言をそのままヘッダファイルの中へ移動します。利用されるのが関数なら、関数の宣言はソースファイルの中に残したまま、その関数の<span class="word">プロトタイプ宣言</span>をヘッダファイルの中に新たに書きます。<br><br></div>
+
+<div>関数のプロトタイプ宣言とは、普通の関数宣言から、<code>{ }</code> で囲まれた関数本体の定義を除き、代わりにセミコロン <span class="cbox">;</span> をつけたものです。下に例を示します。<br></div>
+
+<div><pre class="code">/* プロトタイプ宣言 */<br>void print_matrix(Matrix* entry);<br></pre></div>
+
+<div><pre class="code">/* 関数の宣言 */<br>void print_matrix(Matrix* entry) {<br>    for (int i = 0; i &lt; entry-&gt;row; i = i + 1) {<br>        for (int j = 0; j &lt; entry-&gt;col; j = j + 1) {<br>            printf("%d ", entry-&gt;data[i][j]);<br>        }<br>        printf("\n");<br>    }<br>    /* 行列の終わりであることを示すため空行を入れる */<br>    printf("\n");<br>}<br></pre></div>
+
+<div>ヘッダファイルには、構造体の宣言や関数のプロトタイプ宣言を並べて書きますが、順番に注意が必要です。C言語では、ヘッダファイルであろうとソースファイルであろうと、構造体や関数は、まず宣言した後でないと使うことができません。例えば print_matrix 関数のプロトタイプ宣言には typedef で定義した別名である Matrix が使われていますから、このプロトタイプ宣言より前に typedef を、typedef より前に matrix 構造体の宣言を書かなければなりません。<br><br></div>
+
+<div>以下に実例として、演習 12−2 までに書いた行列演算のための関数をひとつのソースファイルにまとめた場合のヘッダファイルを示します。ファイル名を matrix.h とします。<br></div>
+
+<div><pre class="code">/* ヘッダファイル matrix.h */<br><br>#ifndef _matrix_h<br>#define _matrix_h<br><br>struct matrix {<br>  int row;         /* 行方向の要素数。現在は3に固定 */<br>  int col;         /* 列方向（column）の要素数。現在は3に固定 */<br>  int data[3][3];  /* 行列の各要素 */<br>};<br><br>typedef struct matrix Matrix;<br><br>/* 行列を初期化する */<br>void init_matrix(Matrix* entry);<br><br>/* 行列を表示する */<br>void print_matrix(Matrix* entry);<br><br>/* 行列の加算 */<br>void add_matrix(Matrix* mat1, Matrix* mat2);<br><br>/* 行列の減算 */<br>void sub_matrix(Matrix* mat1, Matrix* mat2);<br><br>/* 行列の乗算 */<br>void mul_matrix(Matrix* mat1, Matrix* mat2);<br><br>#endif<br></pre></div>
+
+<div># から始まる行が最初の方と最後の方に合わせて 3 行ありますが、これについては後に説明します。<br></div>
+
+<h3>#include</h3>
+
+<div>次にヘッダファイル matrix.h に対応するソースファイルを示します。このファイルには、ヘッダファイルの中にプロトタイプ宣言を書いた関数の宣言を並べて書きます。main 関数はヘッダファイルの方にもプロトタイプ宣言を書かなかったので除きます。main 関数を将来再利用することはないので、別なソースファイルに書きます。<br></div>
+
+<div><pre class="code">/* ソースファイル matrix.c */<br><br>#include &lt;stdio.h&gt;<br>#include "matrix.h"<br><br>/* 行列を初期化する */<br>void init_matrix(Matrix* entry) {<br>    entry-&gt;row = 3;<br>    entry-&gt;col = 3;<br><br>    for (int i = 0; i &lt; entry-&gt;row; i = i + 1) {<br>        for (int j = 0; j &lt; entry-&gt;col; j = j + 1) {<br>            entry-&gt;data[i][j] = 0;<br>        }<br>    }<br>}<br><br>/* 行列を表示する */<br>void print_matrix(Matrix* entry) {<br>    for (int i = 0; i &lt; entry-&gt;row; i = i + 1) {<br>        for (int j = 0; j &lt; entry-&gt;col; j = j + 1) {<br>            printf("%d ", entry-&gt;data[i][j]);<br>        }<br>        printf("\n");<br>    }<br>    /* 行列の終わりであることを示すため空行を入れる */<br>    printf("\n");<br>}<br><br>/* 行列の加算 */<br>void add_matrix(Matrix* mat1, Matrix* mat2) {<br>    for (int i = 0; i &lt; mat1-&gt;row; i = i + 1) {<br>        for (int j = 0; j &lt; mat1-&gt;col; j = j + 1) {<br>            mat1-&gt;data[i][j] = mat1-&gt;data[i][j] + mat2-&gt;data[i][j];<br>        }<br>    }<br>}<br><br>/* 行列を減算する */<br>void sub_matrix(Matrix* mat1, Matrix* mat2) {<br>    ....<br>}<br><br>/* 行列を乗算する */<br>void mul_matrix(Matrix* mat1, Matrix* mat2) {<br>    ....<br>}<br></pre></div>
+
+<div>おおよそ演習 12−2 の解答プログラムから関数宣言を抜き出しただけですが、最初の方にある #include&nbsp; が 2&nbsp; 行に増えていることに注意してください。<br></div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br>#include "matrix.h"<br></pre></div>
+
+<div>2 行目の #include は、ヘッダファイル matrix.h の内容全てを、この行に挿入してからコンパイルせよ、という意味です。したがって、コンパイル結果は matrix.h の内容を直接ここに手で書いた場合と同じになります。実は #include は、指定したファイルの内容をそのまま、その行に挿入せよ、という命令です。したがって、ソースファイル matrix.c の内容は、先頭に 2 つのヘッダファイル stdio.h と matrix.h の内容を挿入したものと同じになります。stdio.h は C言語が標準で用意するヘッダファイルなので、ファイル名を <span style="font-family: monospace;">&lt; &gt;</span> で囲みます。matrix.h はそうでないので、ファイル名を <span style="font-family: monospace;">" "</span> で囲みます。<br><br></div>
+
+<div>#include によって matrix.h の内容がそのまま matrix.c の先頭に挿入されるので、ソースファイル matrix.c の方には matrix 構造体の宣言や typedef を書かなくて良いのです。逆に書いてしまうと二重定義になってしまいます。実は、先に示した matrix.h の中の # から始まる 3 行は、二重定義を避けるための仕掛けです。誤って matrix.h を 2 回 #include で読み込んでしまうと、構造体の定義などが二重定義になってしまいます。matrix.c の中に 2 回 #include "matrix.h" と書いてもそうなりますが、別なヘッダファイルを #include で読み込み、そのヘッダファイルが #include "matrix.h" を含んでいても、2 回 matrix.h が読み込まれることになります。<br></div>
+
+<div><pre class="code">#ifndef _matrix_h    /* _matrix_h が定義済みなら #endif まで無視 */<br>#define _matrix_h    /* _matrix_h を定義 */<br>    :<br>#endif<br></pre></div>
+
+<div>#define はマクロを定義します。マクロが定義されると、プログラム中にそのマクロに合致する単語が含まれる場合、その単語を別な文字列で全て置換します。上の例の場合、マクロは _matrix_h で置換される文字列は空白文字です。#ifndef は続くマクロが定義済みである場合、#endif まで無視せよ（何も書かれていないと思え）という命令です。こうしておくことで、仮に matrix.h が #include により 2 回読み込まれたとしても、1 回目の読み込みで _matrix_h が定義されるので、2 回目の読み込みの際は #ifndef から #endif まで無視されます。matrix 構造体が二重に宣言されることはありません。<br><br></div>
+
+<div>マクロは本来、プログラム中の数字などに名前をつけて理解しやすくするために使われます。上の例はマクロの利用方法としては、かなり特殊です。一般的なマクロの使い方は、下のプログラムのような使い方です。下のプログラムでは #define でマクロ SIZE を定義しています。<br></div>
+
+<div><pre>#include &lt;stdio.h&gt;<br>#define SIZE  7<br><br>int main() {<br>    int num[SIZE];<br><br>    for (int i = 0; i &lt; SIZE; i = i + 1) {<br>        num[i] = i * 2;<br>    }<br><br>    for (int i = 0; i &lt; SIZE; i = i + 1) {<br>        printf("%d\n", num[i]);<br>    }<br><br>    return 0;<br>}<br></pre></div>
+
+<div>配列 num の要素数が SIZE になっていますが、これはマクロですから 7 に置き換えられてからコンパイルされます。最初から num[7] と書いた場合と同じ結果になります。これだけでは意味がありませんが、下の 2 つの for 文にも SIZE が登場することに注目してください。<span style="font-family: monospace;">i &lt; SIZE</span> は <span style="font-family: monospace;">i &lt; 7</span> と置き換えられてからコンパイルされます。<span style="font-family: monospace;">i &lt; 7</span> と直接書くのではなく、あえて <span style="font-family: monospace;">i &lt; SIZE </span>と書くことで、i の値が配列の要素数より小さい間だけ繰り返す、という for 文の意図が明確になります。また後で配列 num の要素数を 7 から 8 に増やしたいと思ったときも、#define によるマクロの定義を変えるだけですみます。マクロを使わないと、全ての 7 という数字を 8 に直さなければなりません。この作業は単純ですが、一部の 7 の直し忘れ（あるいは直し過ぎで無関係の 7 を 8 に直してしまう）によるプログラムの誤動作を引き起こしやすい作業です。<br></div>
+
+<h3>他のファイル中の関数の呼び出し</h3>
+
+<div>別のソースファイルの中に宣言が書かれている関数を呼び出すには、呼び出す側でも、その関数のプロトタイプ宣言を含むヘッダファイルを #include で読み込みます。下に main 関数の宣言を含むソースファイル main.c の中身を示します。<br></div>
+
+<div><pre class="code">/* ソースファイル main.c */<br><br>#include &lt;stdio.h&gt;<br>#include "matrix.h"<br><br>int main() {<br>    Matrix mat1, mat2;<br><br>    /* 初期化 */<br>    init_matrix(&amp;mat1);<br>    init_matrix(&amp;mat2);<br><br>    /* 対角成分に1を入れて単位行列にする */<br>    mat1.data[0][0] = 1;<br>    mat1.data[1][1] = 1;<br>    mat1.data[2][2] = 1;<br><br>    /* 1行目のすべての要素に5を入れる */<br>    mat2.data[0][0] = 5;<br>    mat2.data[0][1] = 5;<br>    mat2.data[0][2] = 5;<br><br>    /* 表示 */<br>    print_matrix(&amp;mat1);<br>    printf("  +  \n\n");<br>    print_matrix(&amp;mat2);<br><br>    /* 加算 */<br>    add_matrix(&amp;mat1, &amp;mat2);<br><br>    /* 表示 */<br>    printf("  =  \n\n");<br>    print_matrix(&amp;mat1);<br><br>    return 0;<br>}<br></pre></div>
+
+<div>main 関数の中では matrix.c の中に宣言が書かれている行列演算用の関数をいくつか呼び出しています。このため、ソースファイルの冒頭で #include を使ってヘッダファイル matrix.h を読み込んでいます。ソースファイル main.c と matrix.c の両方を一緒にコンパイルし、得られた実行可能ファイルを実行すると次のような出力が得られます。<br></div>
+
+<div><pre class="result">1 0 0<br>0 1 0<br>0 0 1<br><br>  +<br><br>5 5 5<br>0 0 0<br>0 0 0<br><br>  =<br><br>6 5 5<br>0 1 0<br>0 0 1<br></pre></div>
+
+<div>C言語では、ある関数（例えば main）の中で別な関数（例えば print_matrix）を呼び出すなら、呼び出す関数 main はその別な関数 print_matrix の宣言の後に書かなければなりません。同一のファイルの中に 2 つの関数を書けるなら、まず print_matrix 関数、次に main 関数、という順番で書けば問題ありません。しかし print_matrix 関数が違うファイルの中に書かれている場合は、そのようにはできません。その場合は、まず print_matrix 関数のプロトタイプ宣言、次に main 関数の宣言、という順番で書きます。先に書くのは、呼ばれる関数のプロトタイプ宣言でもよいのです。上の例で、プロトタイプ宣言を含んだヘッダファイル matrix.h を冒頭の #include で読み込んだのは、main 関数の前に print_matrix 関数などのプロトタイプ宣言を挿入するためだったのです。したがって #include でヘッダファイル matrix.h を読み込まずに、直接 print_matrix 等の関数のプロトタイプ宣言を main.c の冒頭に書いても、正しくコンパイルすることができます。<br><br></div>
+
+<div>printf 関数を呼ぶ場合は、#include で stdio.h を読み込まなければならなかったのも、同じ理由です。stdio.h の中には printf 関数のプロトタイプ宣言が含まれています。<br><br></div>
+
+<div>なお、プロトタイプ宣言は、他のファイルの中に書かれている関数を呼ぶときだけでなく、同一ファイル内でそれぞれの関数を好きな順序で書けるようにするためにも有効です。例えば main 関数が print_matrix 関数を呼ぶ場合で、両方の関数が同じソースファイルの中に書かれるとすると、まず print_matrix 関数、次に main 関数、という順番で書くのがふつうです。しかし場合によっては、まず main 関数、次に print_matrix 関数、という順番で書きたいこともあるでしょう。そのような場合は、まず print_matrix 関数のプロトタイプ宣言を冒頭に書けば、次に main 関数の宣言、最後に print_matrix 関数の宣言、という順番で書くことができます。<br></div>
+
+<h3>演習 12−3</h3>
+
+<div>2 つの行列を比較する compare_matrix 関数を matrix.c（と matrix.h）に追加してください。この関数は行列をさすポインタを 2 つ引数として受け取り、この 2 つの行列の要素が完全に一致する場合には 0 を、異なる場合には 1 を返すものとします。この関数を使い、単位行列と適当な値の入った行列を掛け算し、その結果が元の行列と等しいことを確認する main 関数を作成してください。この main 関数はソースファイル main.c の中に書くものとします。</div>
+
+</blockquote>
+</div>
+
+<p><a href="index.html">目次</a></p>
+
+<p class="footnote"><br/>Copyright 2009-2011 the Compview project,
+Tokyo Institute of Technology.  All rights reserved.</p>
+</body></html>

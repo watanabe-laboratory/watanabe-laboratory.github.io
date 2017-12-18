@@ -1,0 +1,24 @@
+prottxt.c (prot1 type)
+  text version.
+  possible to compile in the standard enviroment
+  (just, % gcc -lm prottxt.c).
+  HP sequence of length <= 40 can be analyzed.
+
+protwin1.c (prot1 type)
+  need griddisp1.* and icon* to compile.
+  HP sequence of length <= 20 can be analyzed.
+
+protwin2.c (prot2 type)
+  need griddisp2.* and icon* to compile.
+  no limit on HP length.
+
+Tools for the Window Display (By R. Katoh)
+
+  griddisp1.c, griddisp1.h (need gtk/gtk.h package)
+  griddisp2.c, griddisp2.h (need gtk/gtk.h package)
+
+  icon_D.xpm, icon_P.xpm, icon_G.xpm,
+  icon_R.xpm, icon_H.xpm, icon_U.xpm
+
+Makefile
+
