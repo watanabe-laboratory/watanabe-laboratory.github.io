@@ -1,0 +1,42 @@
+このディレクトリ内のプログラムとコマンドの説明
+
+例題を生成するためのもの
+
+   randnum: 整数の乱数を 1 つ生成する
+
+  （使用法）
+     randnum <a> <b> <seed>
+
+             [a, b] の乱数を 1 つ生成する（a <= b は 0 以上とする）
+             seed は乱数の初期値
+
+   randfloat: 小数の乱数を 1 つ生成する
+
+  （使用法）
+     randnum <a> <b> <seed>
+
+             [a, b] の乱数を 1 つ生成する（a <= b は 0 以上とする）
+             seed は乱数の初期値
+
+   rands: 小数の乱数を n 個生成する
+
+  （使用法）
+     randnum <a> <b> <seed> <n>
+
+             [a, b] の乱数を n 個生成する（a <= b は 0 以上とする）
+             seed は乱数の初期値
+
+ソートのためのもの
+
+    ssort: 選択ソートアルゴリズム（プログラムは ssort.c）
+    msort: マージソートアルゴリズム（プログラムは msort.c）
+    xsort, ysort, zsort: 覆面ソートアルゴリズム
+    ssortT, msortT, xsortT, ysortT, zsortT: 時間測定用プログラム
+
+   （使用法）
+      ssort <n> < <file name>
+
+        file name のファイルからデータを読み込み，ソートする．
+        比較の回数も表示される．
+
+以上．

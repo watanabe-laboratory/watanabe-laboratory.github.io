@@ -1,0 +1,182 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="lecture.css">
+</head><body>
+
+<h1><span class="title">C言語入門</span><br />第 10 章　構造体</h1>
+
+<div class="frame">
+<div>C言語プログラミングにおいて、配列はデータの集まりを管理するときにかかせない道具です。本章では、配列と同様、データの集まりを管理するときにはかかせない道具である構造体について説明します。<br></div>
+
+<h2>スケジュール管理プログラムを作る</h2>
+
+<blockquote>
+<div>簡単なスケジュール管理をおこなうプログラムを作成してみましょう。簡単のために、管理する項目は以下の 2 つだけとします。
+また管理する最大の予定数は 100 とします。
+
+
+<ol><li>開始時間（年、月、日）</li><li>表題<br></li></ol>
+
+<p>
+2 つしか項目がないといっても、実際には開始時間は年・月・日・時の 4 つの要素に分かれますし、表題についてもさまざまなパターンが考えられます。また、機能としては以下を実現することにします。
+</p>
+
+<ol><li>キーボードから新しい予定を入力できること</li><li>入力した予定を古い順に並べて表示できること</li></ol></div>
+
+<div>このような機能を実現するには、管理する項目をひとまとまりにしておく必要があります。
+今まで学んだ内容を振り返ると、これは配列を用いて実現できそうです。たとえば開始時間はすべて整数になるため、4 つの要素（年、月、日、時）を持つ配列で表せます。これが予定の個数分必要になるため、予定の最大件数である 100 件分必要になります。つまり 100 x 4 の 2 次元配列が必要になります。次に、表題は文字列で表現することにします。文字列の最大長を 100 文字とすると、100 x 100 の 2 次元配列が必要になります。以上の配列をC言語のプログラムで表現すると以下のようになります。
+</div>
+
+<div><pre class="code">/* 開始時間 */<br>int time[100][4];<br>/* 表題 */<br>char event[100][100];<br></pre></div>
+
+<div><p>
+このように 2 種類の配列を用いれば、必要なデータを扱うことができます。しかしこれでは以下の 2 つの理由で、プログラムを書くのが大変になってしまいます。
+</p>
+
+<ul><li>複数の配列をまとめて扱わなければならない。このため、プログラム中で一部の配列だけ処理し、残りの配列の処理を忘れるという間違いをおかしやすい。</li><li>将来必要なデータの種類が追加で増えた場合、新たな配列が追加になる。その際、何箇所ものプログラムの修正が必要になる可能性がある。</li></ul>
+
+<p>
+1 つの配列にすべてのデータをまとめられれば、プログラム中の処理の記述はかなり簡潔になりますが、配列には同じデータ型の値しか保存できません。たとえば、数値である開始時間と、文字列である表題を同じ配列に保存できません。このため、配列を用いている限り、上のような問題が避けられません。
+</p></div>
+
+<div>このような複数のデータ型で構成されるデータを、容易に扱う方法はないのでしょうか？ たとえば現実世界であれば、1 つの予定を 1 枚のカードにまとめて記述することができます。 1 枚のカードに「開始時間」と「表題」の 2 つの項目を作り、1 つの予定についての情報は 1 枚のカードにまとめて書いてしまうことができます。
+こうすれば、分割すると不自然な情報（開始時間と表題）が 1 枚のカードにおさまるため、管理がとても容易です。先程の 2 つの配列で別々に管理するやり方は、現実世界で考えると、
+開始時間カードと表題カードを別々に作り、互いに関連性を失わないように管理する、という少々非現実的な手法だということが分かります。</div>
+
+<h3>構造体の宣言</h3>
+
+<div>上のような問題に対処するため、C言語には異なるデータ型の値をひとまとめにする機能があります。これを<span class="word">構造体（structure）</span>といいます。構造体の宣言は下のような形をとります。</div>
+
+<div><pre class="syntax">struct 《構造体名》 {<br>    《データ型》 《メンバ名》;<br>    《データ型》 《メンバ名》[《要素数》];<br>     ...<br>};<br></pre></div>
+
+<div>2 行目、3 行目はまとめたい値のデータ型とその名前を書きます。3 行目は配列型の値をふくめたい場合の書き方です。先ほどの予定のデータをひとまとめにした構造体の宣言は下のようになります。<br></div>
+
+<div><pre class="code">struct schedule {<br>  int year;        /* 年 */<br>  int month;       /* 月 */<br>  int day;         /* 日 */<br>  int hour;        /* 時 */<br>  char title[100]; /* 表題 */<br>};<br></pre></div>
+
+<div>この構造体は int 型の値を 4 つ、char 型の配列を 1 つ含みます。それぞれ、名前は year、month、day、hour、title です。1 個の構造体の中に含まれれる値のことを<span class="word">メンバ（member）</span>、それらの名前を<span class="word">メンバ名</span>といいます。また、この構造体自体にも名前がついており、上の例では schedule です。struct の次にあるのが構造体の名前です。<br><br></div>
+
+<div>上のように構造体を宣言すると、以降は構造体を通常のデータ型と同じように扱うことができます。データ型の名前は <span class="word">struct《構造体名》</span>です。単語 2 つで 1 つの名前です。例えば、<br></div>
+
+<div><pre class="syntax">struct schedule exam;<br>struct schedule todo[10];<br>struct schedule* sptr;<br></pre></div>
+
+<div>3 つの行はそれぞれ exam、todo、sptr の 3 つの変数を宣言します。exam はデータ型が struct schedule である変数、todo は struct schedule 型の配列、sptr は struct schedule 型をさすポインタ型の変数です。struct schedule の部分を 1 個のデータ型の名前と見ると、これまで紹介した変数の宣言と同じ形をしていることがわかります。なお、変数を宣言するときは、= に続けて初期値を書くことができるのですが、構造体の場合、少し複雑なので、上の例では書いていません。初期値は後ほど代入することとします。<br><br></div>
+
+<div>構造体のメンバの値を読み出したり、メンバに新しい値を代入したりするには、<span class="cbox">.</span>（ドット）演算子を使います。構造体型の変数（あるいは計算結果が構造体になるような式）に続けて <code>.《メンバ名》</code>と書きます。構造体を使ったプログラムの例を示します。<br></div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br>#include &lt;string.h&gt;<br><br>struct schedule {<br>    int year;        /* 年 */<br>    int month;       /* 月 */<br>    int day;         /* 日 */<br>    int hour;        /* 時 */<br>    char title[100]; /* 表題 */<br>};<br><br>int main() {<br>    struct schedule exam;<br><br>    /* 「2008/09/02 13:00 前期筆記試験」という情報を作成する */<br>    exam.year  = 2008;<br>    exam.month = 9;<br>    exam.day   = 2;<br>    exam.hour  = 13;<br>    strcpy(exam.title, "前期筆記試験");<br><br>    printf("%04d/%02d/%02d %02d:00 %s\n",<br>           exam.year, exam.month, exam.day, exam.hour, exam.title);<br><br>    return 0;<br>}<br></pre></div>
+
+<div>main 関数の中では、まず構造体型の変数 exam を宣言しています。次に各メンバに値を代入しています。例えば<code> exam.year = 2008</code> は、exam のメンバ year に 2008 を代入します。<code>exam.title</code> へは代入を使わずに、<a href="/quotes/?c=2&amp;p=8#473">strcpy 関数</a>で文字列をコピーしています。これは、title は char 型の配列なので、各要素にそれぞれ代入しなければならないからです。その後、printf 関数で、変数 exam の各メンバの値を表示します。<code>exam.year</code> など、<span class="cbox">. </span>（ドット）演算子でメンバの値を読み出しているのがわかります。このプログラムの実行結果は下のようになります。<br></div>
+
+<div><pre class="result">2008/09/02 13:00 前期筆記試験</pre></div>
+
+<p>ひとかたまりのデータを取り扱うという意味では、配列と構造体はよく似ています。実際、メモリ上の姿は、どちらも、各要素やメンバのためのメモリ領域を連続的に並べて配置したものです。しかし、配列の場合、各要素はインデックスという番号で指定します。一方、構造体の場合、各メンバは名前で指定します。一般に、同じ種類のデータ（配列の各要素）に対して同じような処理を繰り返しほどこしたい場合には配列が、そうでない場合には構造体が用いられます。</p>
+
+<div style="text-align:center">
+<a href="10_arraystruct.png">
+<img class="fig" src="10_arraystruct.png"/></a>
+<p>配列と構造体</p>
+</div>
+
+<h3>構造体の初期化</h3>
+
+<div>構造体を宣言するときは、配列の場合と同じように、{ } で囲んで初期値を与えることができます。構造体のメンバの数が増えると間違いをおこしやすくなるので、使うときには注意が必要ですが、例えば上のプログラムの 13 行目から 20 行目は次のように書き直せます。
+</div>
+
+<div><pre class="code">struct schedule exam = { 2008, 9, 2, 13, "前期筆記試験" };<br></pre></div>
+
+<div>1 行で書くことができますが、構造体のメンバの記述順序を覚えておき、その順番とおりに記述する必要があります。間違いをおかしやすいので、今回のように単純な構造体でなければ利用しないほうがいいでしょう。
+</div>
+
+<h3>構造体のメンバ</h3>
+
+<div>いくつかの int 型や double 型の値を 1 つにまとめたものが<span class="word">構造体の値</span>です。これを値とする変数が<span class="word">構造体型の変数</span>です。int 型の変数と int 型の値が異なるものであるように、構造体型の変数と構造体の値は異なるものですから、注意してください。困ったことに、しばしば、構造体の値と構造体型の変数をどちらも「構造体」と呼ぶことがあるので、混乱しやすいからです。<br><br></div>
+
+<div>構造体の値のメンバは、まとめられた値の一部です。例えば schedule 構造体の year メンバは、1 つにまとめられた 5 の値のうち、最初の int 型の値のことです。では構造体型の変数のメンバは何だと考えればよいでしょうか？<br><br></div>
+
+<div>構造体型の変数は、それぞれのメンバの型の変数を 1 つにまとめたもの、と考えることができます。構造体型の変数のメンバは、1 つにまとめられた変数のうちの一部です。例えば schedule 構造体型の変数 exam は、5 つの変数を 1 つにまとめたものと考えられます。その year メンバ、つまり exam.year は、1 つにまとめられた変数のうちの、最初の int 型の変数のことです。<br><br></div>
+
+<div>構造体型の変数を 1 つ宣言すると、その構造体のメンバの個数分の変数がまとめて宣言されます。個々の変数を直接扱いたいときは exam.year のように変数名にメンバ名を付加して区別します。一方、それらの変数をまとめて扱いたいときは、exam のように変数名だけを書きます。例えば exam とだけ書いて、その変数の値を読み出すと、得られる値は各メンバに対応する変数の値を全てまとめたものとなります。このまとめた値が、構造体の値というわけです。<br></div>
+
+</blockquote>
+<h2>構造体の配列、引数</h2>
+
+<blockquote>
+<h3>構造体の配列</h3>
+
+<div>予定のデータを 1 個の構造体にまとめると、取り扱いが用意になります。しかしスケジュール管理の場合は、多数の予定を扱わなければなりません。これに対処するために、構造体の配列を用いることにします。構造体を表すデータ型の名前は、int のような他の普通のデータ型の名前と同様に扱えます。構造体の配列を宣言する場合も同様です。以下のプログラム例を見て下さい。</div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br>#include &lt;string.h&gt;<br><br>struct schedule {<br>    int year;        /* 年 */<br>    int month;       /* 月 */<br>    int day;         /* 日 */<br>    int hour;        /* 時 */<br>    char title[100]; /* 表題 */<br>};<br><br>int main() {<br>    struct schedule schedules[3];<br><br>    schedules[0].year  = 2008;<br>    schedules[0].month = 4;<br>    schedules[0].day   = 11;<br>    schedules[0].hour  = 10;<br>    strcpy(schedules[0].title, "講義ガイダンス");<br><br>    schedules[1].year  = 2008;<br>    schedules[1].month = 7;<br>    schedules[1].day   = 14;<br>    schedules[1].hour  = 15;<br>    strcpy(schedules[1].title, "ゼミ");<br><br>    schedules[2].year  = 2008;<br>    schedules[2].month = 3;<br>    schedules[2].day   = 2;<br>    schedules[2].hour  = 12;<br>    strcpy(schedules[2].title, "論文提出日");<br><br>    for (int i = 0; i &lt; 3; i = i + 1)<br>    {<br>        printf("%04d/%02d/%02d %02d:00 %s\n",<br>               schedules[i].year, schedules[i].month, schedules[i].day, schedules[i].hour,<br>               schedules[i].title);<br>    }<br>    return 0;<br>}<br></pre></div>
+
+<div>main 関数の最初で要素数が 3 の構造体の配列 schedules が宣言されています（この例で構造体名は schedule ですが配列名は schedules で、後者は複数形にしています）。配列 schedules の各要素の構造体のメンバにアクセスするには<code> schedulers[0].year </code>などと書きます。<code>schedulers[0]</code>（の計算結果）は、配列の 0 番目の要素になっている構造体です。それに <code>.year</code> （ドット、メンバ名）と続けて書きます。プログラムの実行結果を以下に示します。<br></div>
+
+<div><pre class="result">2008/04/11 10:00 講義ガイダンス<br>2008/07/14 15:00 ゼミ<br>2008/03/02 12:00 論文提出日<br></pre></div>
+
+<h3>構造体を引数にとる関数</h3>
+
+<div>構造体を関数の引数として渡すことも可能です。以下に、構造体 schedule の各メンバの値を表示する関数を示します。<br></div>
+
+<div><pre class="code">/* 構造体scheduleの全メンバを表示する */<br>void printSchedule(struct schedule data) {<br>    printf("%04d/%02d/%02d %02d:00 %s\n",<br>           data.year, data.month, data.day, data.hour, data.title);<br>}<br></pre></div>
+
+<div><code>struct schedule</code> がデータ型の名前ですから、関数 <code>printSchedule</code> は、<code>struct schedule</code> 型の引数 <code>data</code> を受け取って計算する関数となります。構造体を引数にするときは、今まで <code>int</code> や <code>double</code> と書いていたところに<code> struct schedule</code> と書くだけです。<br><br></div>
+
+<div>構造体を関数の引数として渡すと、構造体の各メンバの値がすべてまとめて関数の引数として渡されます。引数を受け取る関数の側では、渡された各メンバの値から新しい構造体を作ります。printSchedule 関数の引数 data の値はこの構造体です。このため、第 9 章の <a href="/quotes/?c=2&amp;p=10#636">swap 関数</a>と同様に、引数として渡された構造体の値を関数内で変更しても、元の構造体には反映されません。以下にその例を示します。</div>
+
+<div><pre>#include &lt;stdio.h&gt;<br>#include &lt;string.h&gt;<br><br>struct schedule {<br>&nbsp;&nbsp;&nbsp; int year;&nbsp; /* 年 */<br>&nbsp;&nbsp;&nbsp; int month;&nbsp; /* 月 */<br>&nbsp;&nbsp;&nbsp; int day;&nbsp;&nbsp; /* 日 */<br>&nbsp;&nbsp;&nbsp; int hour;&nbsp; /* 時 */<br>&nbsp;&nbsp;&nbsp; char title[100]; /* 表題 */<br>};<br><br>/* 年を強制的に2年進める */<br>void update2years(struct schedule target) {<br>&nbsp;&nbsp;&nbsp; target.year = target.year + 2;<br>}<br><br>/* 構造体scheduleの全メンバを表示する */<br>void printSchedule(struct schedule data) {<br>&nbsp;&nbsp;&nbsp; printf("%04d/%02d/%02d %02d:00 %s\n",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; data.year, data.month, data.day, data.hour, data.title);<br>}<br><br>int main() {<br>&nbsp;&nbsp;&nbsp; struct schedule exam;<br><br>&nbsp;&nbsp;&nbsp; /* 「2006/10/30 10:00 ハロウィン」という予定を作成する */<br>&nbsp;&nbsp;&nbsp; exam.year = 2006;<br>&nbsp;&nbsp;&nbsp; exam.month = 10;<br>&nbsp;&nbsp;&nbsp; exam.day = 30;<br>&nbsp;&nbsp;&nbsp; exam.hour = 10;<br>&nbsp;&nbsp;&nbsp; strcpy(exam.title, "ハロウィン");<br><br>&nbsp;&nbsp;&nbsp; printSchedule(exam);<br><br>&nbsp;&nbsp;&nbsp; /* 構造体 exam のメンバの値を変更する？ */<br>&nbsp;&nbsp;&nbsp; update2years(exam);<br><br>&nbsp;&nbsp;&nbsp; printSchedule(exam);<br><br>&nbsp;&nbsp;&nbsp; return 0;<br>}</pre></div>
+
+<div>このプログラムを実行すると次のようになります。<br></div>
+
+<div><pre class="result">2006/10/30 10:00 ハロウィン<br>2006/10/30 10:00 ハロウィン<br></pre></div>
+
+<div>update2years 関数を呼んでいるにもかかわらず、変数 exam の値は変わっていません。構造体も int 型の値などと同じように扱われるのです。int 型の値の場合と同様に、変数 exam の値を update2years 関数の中から変えたいときは、次章で説明する構造体をさすポインタを使わなければなりません。<br><br></div>
+
+<div>構造体を関数に引数として渡す処理に似た処理として、構造体を別な変数に代入する、という処理があります。代入の場合も、右辺の構造体の各メンバの値が、それぞれ左辺の構造体の対応するメンバに代入されます。したがって、次のようなプログラムを実行しても、変数 exam の値はやはり変化しません。<br></div>
+
+<div><pre>#include &lt;stdio.h&gt;<br>#include &lt;string.h&gt;<br><br>struct schedule {<br>&nbsp;&nbsp;&nbsp; int year;&nbsp; /* 年 */<br>&nbsp;&nbsp;&nbsp; int month;&nbsp; /* 月 */<br>&nbsp;&nbsp;&nbsp; int day;&nbsp;&nbsp; /* 日 */<br>&nbsp;&nbsp;&nbsp; int hour;&nbsp; /* 時 */<br>&nbsp;&nbsp;&nbsp; char title[100]; /* 表題 */<br>};<br><br>/* 構造体scheduleの全メンバを表示する */<br>void printSchedule(struct schedule data) {<br>&nbsp;&nbsp;&nbsp; printf("%04d/%02d/%02d %02d:00 %s\n",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; data.year, data.month, data.day, data.hour, data.title);<br>}<br><br>int main() {<br>&nbsp;&nbsp;&nbsp; struct schedule exam;<br><br>&nbsp;&nbsp;&nbsp; /* 「2006/10/30 10:00 ハロウィン」という予定を作成する */<br>&nbsp;&nbsp;&nbsp; exam.year = 2006;<br>&nbsp;&nbsp;&nbsp; exam.month = 10;<br>&nbsp;&nbsp;&nbsp; exam.day = 30;<br>&nbsp;&nbsp;&nbsp; exam.hour = 10;<br>&nbsp;&nbsp;&nbsp; strcpy(exam.title, "ハロウィン");<br><br>&nbsp;&nbsp;&nbsp; struct schedule exam2;<br>&nbsp;&nbsp;&nbsp; exam2 = exam;&nbsp;&nbsp;&nbsp; /* exam2 へ exam の値を代入 */<br><br>&nbsp;&nbsp;&nbsp; /* 構造体 exam のメンバの値も変わる？ */<br>&nbsp;&nbsp;&nbsp; exam2.year = exam2.year + 2;<br><br>&nbsp;&nbsp;&nbsp; printSchedule(exam);<br><br>&nbsp;&nbsp;&nbsp; return 0;<br>}</pre></div>
+
+<div>実行結果は次のようになります。変数 exam の値が変わることはありません（変数 exam2 の値は変わり、year が 2008 になります）。<br></div>
+
+<div><pre>2006/10/30 10:00 ハロウィン<br>2006/10/30 10:00 ハロウィン</pre></div>
+
+<h3>配列を引数にとる関数</h3>
+
+<div>引数として int 型の値を渡しても、構造体を渡しても、関数の中から元の変数の値を変えることはできません。しかしこれには例外があり、配列を関数に引数として渡したときだけ、挙動が異なります。第 7 章で<a href="/quotes/?c=2&amp;p=8#508">文字列を操作する関数を紹介</a>しましたが、これらは配列を引数として受け取り、受け取った配列の要素の値を変更する関数でした。配列を関数に引数として渡すと、各要素の値がそれぞれ関数に渡され、それを受け取った関数の側で新しい配列を作るわけではないのです。<br><br></div>
+
+<div>したがって配列についてなら、2 つの配列を引数として受け取り、各要素の値を交換する swap 関数を作成することができます。<br></div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br><br>void swap(int a[], int b[], int size)<br>{<br>    for (int i = 0; i &lt; size; i = i + 1) {<br>        int oldA = a[i];<br>        int oldB = b[i];<br><br>        a[i] = oldB;<br>        b[i] = oldA;<br>    }<br>}<br><br>int main() {<br>    int size = 10;<br>    int arrayA[] = {1, 2, 3,  4,  5,  6,  7,  8,  9,  10};<br>    int arrayB[] = {1, 4, 9, 16, 25, 36, 49, 64, 81, 100};<br><br>    /* 配列の全要素を表示する */<br>    printf("arrayA = ");<br>    for (int i = 0; i &lt; size; ++i) {<br>        printf("%d ", arrayA[i]);<br>    }<br>    printf("\n");<br><br>    swap(arrayA, arrayB, size);<br><br>    /* 配列の全要素を表示する */<br>    printf("arrayA = ");<br>    for (int i = 0; i &lt; size; ++i) {<br>        printf("%d ", arrayA[i]);<br>    }<br>    printf("\n");<br><br>    return 0;<br>}<br></pre></div>
+
+<div>実行結果は次のようになります。arrayA の各要素の値が変化します。<br></div>
+
+<div><pre class="result">arrayA = 1 2 3 4 5 6 7 8 9 10<br>arrayA = 1 4 9 16 25 36 49 64 81 100<br></pre></div>
+
+<div>関数 swap の宣言に注目してください。for 文を使って全ての要素の値を個別に交換しています。けして引数 a と b の値を直接交換しているわけではありません。実際、関数 swap を次のように変えてしまうと、正しくないプログラムになってしまいます。<br></div>
+
+<div><pre class="code">void swap(int a[], int b[], int size)<br>{<br>    int oldA[] = a;<br>    a = b;<br>    b = oldA;<br>}<br></pre></div>
+
+<h3>配列名とポインタ</h3>
+
+<div>このように配列を関数に引数として渡すときの挙動は例外的ですが、前章で説明した<a href="chap9.html">配列名の暗黙の読み替え規則</a>を考えると、そのような挙動も一貫性がとれているといえます。変数 arrayA と arrayB の値がどちらも int 型の配列だとすると、読み替え規則により、次の関数呼び出しはどちらも同じことになります。<br></div>
+
+<div><pre class="code">swap(arrayA, arrayB, 10);<br>swap(&amp;arrayA[0], &amp;arrayB[0], 10);<br></pre></div>
+
+<div>どちらも、関数に渡されるのは配列の先頭の要素をさすポインタです。ポインタを受け取った関数の側では、そのポインタがさす（要素を先頭とする）配列そのものが引数の値となります。関数の引数の中でも、配列型の引数だけは少し挙動が特別なのです。このため、配列を引数として受け取った関数は、受け取った配列の要素の値を変更できる、という挙動も合理的ということになります。<br></div>
+
+</blockquote>
+<h2>演習</h2>
+
+<blockquote>
+<h3>演習 10−1</h3>
+
+<div>利用者にキーボードから最大 10 件の予定を入力させ、入力が終わったら、それまで入力された予定を全て表示するプログラムを作成してください。1 件の予定は、年、月、日、時、表題からなるとします。また、個々の予定を入力する前に「入力を継続するかどうか」を聞き、継続するなら 1、しないなら 0 をキーボードから入力させ、0 であれば入力終了と見なすようにしてください。参考として、キーボードから予定を入力させ、入力されたデータを構造体 schedule のメンバに代入するプログラムを以下に示します。
+</div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br>#include &lt;string.h&gt;<br><br>struct schedule {<br>    int year;        /* 年 */<br>    int month;       /* 月 */<br>    int day;         /* 日 */<br>    int hour;        /* 時 */<br>    char title[100]; /* 予定 */<br>};<br><br>int main() {<br>    struct schedule entry;<br><br>    int input = 0;<br>    printf("スケジュールを入力する場合は1を、しない場合は0を入力してください。");<br>    scanf("%d", &amp;input);<br>    if (input == 1) {<br>        int year;<br>        int month;<br>        int hour;<br>        int day;<br>        char title[256];<br><br>        printf("年を入力してください: ");<br>        scanf("%d", &amp;year);<br>        printf("月を入力してください: ");<br>        scanf("%d", &amp;month);<br>        printf("日を入力してください: ");<br>        scanf("%d", &amp;day);<br>        printf("時を入力してください: ");<br>        scanf("%d", &amp;hour);<br>        printf("タイトル入力してください: ");<br>        scanf("%s", &amp;title);<br><br>        entry.year = year;<br>        entry.month = month;<br>        entry.day = day;<br>        entry.hour = hour;<br>        strcpy(entry.title, title);<br>    }<br>    return 0;<br>}<br></pre></div>
+
+</blockquote>
+</div>
+
+<p><a href="index.html">目次</a></p>
+
+<p class="footnote"><br/>Copyright 2009-2011 the Compview project,
+Tokyo Institute of Technology.  All rights reserved.</p>
+</body></html>

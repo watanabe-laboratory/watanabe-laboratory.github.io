@@ -146,6 +146,6 @@ CHSH 確率が 0.9 や 1 であったら何か論理が破綻するのだろう�
 
 ## ５．関連のページへのリンク {#links}
 
-* [Web 鼎談](http://www.is.titech.ac.jp/~watanabe/webteidan/index.html)：1999 年に数セミ誌上で行った「計算世界観」の先駆け的議論
-* [コンピュータサイエンス](http://www.is.titech.ac.jp/~watanabe/csbook/index.html)：「計算」とは何かを知ってもらうための本（渡辺治，丸善サイエンスパレット，2015）のページ
-* [教養としてのコンピュータサイエンス](http://www.is.titech.ac.jp/~watanabe/csbook/old/index.html)：「計算」とは何かを知ってもらうための教科書（渡辺治，サイエンス社，2000）の紹介と演習教材
+* [Web 鼎談](http://tcs.c.titech.ac.jp/webteidan/index.html)：1999 年に数セミ誌上で行った「計算世界観」の先駆け的議論
+* [コンピュータサイエンス](http://tcs.c.titech.ac.jp/csbook/index.html)：「計算」とは何かを知ってもらうための本（渡辺治，丸善サイエンスパレット，2015）のページ
+* [教養としてのコンピュータサイエンス](http://tcs.c.titech.ac.jp/csbook/old/index.html)：「計算」とは何かを知ってもらうための教科書（渡辺治，サイエンス社，2000）の紹介と演習教材

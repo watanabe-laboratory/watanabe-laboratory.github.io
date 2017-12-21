@@ -1,0 +1,208 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="lecture.css">
+</head><body>
+
+<h1><span class="title">C言語入門</span><br />第 06 章　配列と文字列</h1>
+
+<div class="frame">
+<h2>目的</h2>
+
+<div><p>
+本章ではプログラムの中でもう少し高度なデータを扱えるようにするため、以下の内容について学びます。
+</p>
+
+<ol><li>多くのデータを扱う手段である配列の考え方と使い方を学ぶ</li><li>文字列もまた、配列として管理されていることを学ぶ</li></ol></div>
+
+<h2>「エラトステネスのふるい」で配列を学ぶ</h2>
+
+<blockquote>
+<div>素数を列挙する単純な方法として<a href="http://ja.wikipedia.org/wiki/%E3%82%A8%E3%83%A9%E3%83%88%E3%82%B9%E3%83%86%E3%83%8D%E3%82%B9%E3%81%AE%E7%AF%A9" target="_blank">「エラトステネスのふるい」（Sieve of Eratosthenes）</a>というアルゴリズムが古くから知られています。 以下では「エラトステネスのふるい」を使って素数の列挙をおこなうプログラムを作成することを目標とし、そのために必要になる<span class="word">配列</span>について学びます。</div>
+
+<div><p>
+エラトステネスのふるいでは以下ような手順で素数を列挙します。<br>
+</p>
+
+<ol><li>2 以上の整数を列挙します。</li><li>最小の整数である 2 を残し、その倍数（つまり 4 以上の偶数）をすべて消します。</li><li>次の最小の整数である 3 を残し、その倍数（つまり6 以上の倍数）をすべて消します。</li><li>次の最小の整数である 5 を残し、その倍数（つまり10 以上の倍数）をすべて消します。</li><li>以上、同様にまだ消えていない最小の数を残し、その倍数をすべて消します。</li><li>これを繰り返し、残っている整数が素数となります。</li></ol></div>
+
+<div>
+<p>
+この手順では、各数が素数であるかどうかを記憶しておく必要があります。
+たとえば 100 までの素数を求める場合には、以下のように 100 個の変数を使わなくてはならないでしょう。以下のプログラム（一部分だけ載せています）では、a1 〜 a100 の変数を用意し、0 または 1 の数字で素数であるか否かを表そうとしています。
+</p></div>
+
+<div><pre class="code">int a1   = 0;<br>int a2   = 1;<br>int a3   = 1;<br>int a4   = 1;<br>int a5   = 1;<br>...（省略）...<br>int a100 = 1;</pre></div>
+
+<div>始めは変数の値を 1 としておいて、素数でないことがわかった時点で 0 を代入する、という方針です。<br><br></div>
+
+<div>しかし、このような方法ではとても手間がかかります。 そこでこのような場合は、複数のデータを効率よく扱う道具として、<span class="word">配列</span>を利用します。
+<br><br></div>
+
+<div>配列は以下のように宣言します。配列の宣言は変数の宣言と似ていますが、後ろに [  ] で囲んだ要素数を書くところが大きな違いです。
+</div>
+
+<div><pre class="syntax">《データ型》 《配列名》[《要素数》];<br></pre></div>
+
+<div>このように宣言すると、要素数と同じ数の変数をまとめて宣言したことと同等になります。ただしこの場合、宣言した個々の変数のことを変数とは呼ばずに<span class="word">配列の要素</span>と呼びます。配列の要素の型は、上で《データ型》とあるところに書かれた型となります。
+配列の各要素の値を参照したり、新しい値を代入したりするときは、以下のように書きます。
+</div>
+
+<div><pre class="syntax">《配列名》[《インデックス》]<br></pre></div>
+
+<p>これ全体が普通の変数の変数名に対応します。《インデックス》には、その配列の要素が先頭から数えて何番目かを表す値が入ります。配列は a<sub>0</sub>, a<sub>1</sub> といった添え字つきの変数をプログラムの中で利用するための方法といえます。</p>
+
+<p>《インデックス》は必ず 0 から始まる決まりになっています。したがって要素数が 10 であれば、インデックスがとる値は 0 〜 9 になります。1 〜 10 と誤解しやすいので注意して下さい。《インデックス》が 0 なら配列の先頭の要素を、《インデックス》が《要素数》- 1 であれば配列の最後の要素を表します。
+</p>
+
+p以下に変数 X を宣言して初期値を 5 にし、次に要素数 3 の配列 Y を宣言して、各要素に 9、6、12 を代入するプログラム（の一部）を示します。配列 Y は実際には 3 つの変数 Y<sub>0</sub>、Y<sub>1</sub>、Y<sub>2</sub> を束ねたものと考えられます。</p>
+
+<div style="text-align:center">
+<a href="06_array.png">
+<img class="fig" src="06_array.png"/></a>
+<p>（クリックで拡大）</p>
+</div>
+<p>別なプログラムの例も示しましょう。</p>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br><br>int main() {<br>    /* 要素数5の配列arrayを宣言します */<br>    int array[5];<br><br>    /* 配列の各要素に値を代入します */<br>    array[0] = 0 * 0;<br>    array[1] = 1 * 1;<br>    array[2] = 2 * 2;<br>    array[3] = 3 * 3;<br>    array[4] = 4 * 4;<br><br>    /* 配列の各要素の値を表示します。 */<br>    printf("array[0] = %d\n", array[0]);<br>    printf("array[1] = %d\n", array[1]);<br>    printf("array[2] = %d\n", array[2]);<br>    printf("array[3] = %d\n", array[3]);<br>    printf("array[4] = %d\n", array[4]);<br><br>    return 0;<br>}<br></pre></div>
+
+<div>array[0] や array[1] などが普通の変数とまったく同様に使えるのがわかるかと思います。しかしそれだけでは、わざわざ配列を使う意味がありません。配列を使う意義がわかるように、上のプログラムを書き換えたものを下に示します。上と下のプログラムで、動作はまったく同じです。<br></div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br><br>int main() {<br>    /* 要素数5の配列arrayを定義します */<br>    int array[5];<br>    int i;<br><br>    /* 配列の各要素に値を代入します */<br>    for (i = 0; i &lt; 5; i = i + 1) {<br>        array[i] = i * i;<br>    }<br><br>    /* 配列の各要素の値を表示します。 */<br>    for (i = 0; i &lt; 5; i = i + 1) {<br>        printf("array[%d] = %d\n", i, array[i]);<br>    }<br><br>    return 0;<br>}<br></pre></div>
+
+<div>配列の《インデックス》には、0 や 1 のような定数だけでなく、int 型の変数や、もっと複雑な式を書くことができます。例えば <code>array[i]</code> とは、配列 <code>array</code> の <code>i</code> 番目の要素を意味します。変数<code> i</code> の値が 3 なら 3 番目の要素、4 なら 4 番目の要素、となります。これを利用してさらに for 文や while 文と組み合わせると、プログラムを短く簡潔に書くことができるようになります。<br><br></div>
+
+<div>なお 15 行目の printf 関数の呼び出しですが、第 1 引数の文字列の中に %d が 2 個含まれています。表示される文字列は、最初の %d を printf 関数の第 2 引数の値で、次の（= の右側の） %d を array[i] の値で置き換えたものです。<br></div>
+
+<h3>演習 6−1</h3>
+
+<div>エラトステネスのふるいを使って、1000 以下の素数をすべて求めて表示するプログラムを作成し、結果を示してください。以下にプログラムの基本構造を示しますので、<span class="input">__(1)__</span> 〜 <span class="input">__(5)__</span> の部分を自分で考えてください。
+</div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br><br>int main() {<br>    int i;<br>    /* 各整数が素数かどうかを記録する配列<br>       0〜1000までの値を管理するため1001の要素の配列を定義している */<br>    int flag[<span class="input">__(1)__</span>];<br><br>    /* 最初はすべて素数とみなす<br>       整数iはflag[i]が1のとき素数、0のとき素数でないと定義する */<br>    for (i = 0; i &lt;= 1000; i = i + 1) {<br>        flag[<span class="input">__(2)__</span>] = 1;<br>    }<br><br>    /* 0, 1は素数ではない */<br>    flag[0] = 0;<br>    flag[1] = 0;<br><br>    for (i = 0; i &lt;= 1000; i = i + 1) {<br>        /* 1になっている最初の値を探す */<br>        if (flag[<span class="input">__(3)__</span>] == 1) {<br>            /* iは素数のため素数の倍数の値をすべて0にする */<br>            int j = i * 2;<br>            while (j &lt;= 1000) {<br>                <span class="input">__(4)__</span><br>            }<br>        }<br>    }<br><br>    /* この時点で1となっている要素は素数である */<br>    for (i = 0; i &lt;= 1000; i = i + 1) {<br>        <span class="input">__(5)__</span><br>    }<br>    return 0;<br>}<br></pre></div>
+
+<h3>インデックスの値についての注意</h3>
+
+<div>配列は変数をまとめて扱うことができる点がとても便利です。しかし配列を利用する時には、配列のインデックスが、配列を宣言したときに決めた範囲を超えないように注意する必要があります。<br>インデックスとして負の値や宣言時に決めた最大値を超えたインデックスを用いても、コンパイル・エラーとはなりません。
+しかし、プログラムの動作がどのようになるかまったく予測できません。最悪の場合、プログラムは正常に終了するものの、誤った計算結果を出力することもあります。<br><br></div>
+
+<div>たとえば、下のプログラムを見てください。要素数が 10 の int 型の配列を宣言し、-5 や 15 といったインデックスを用いて要素を参照しています。このプログラムは問題なくコンパイルして実行できますが、実際の計算結果は予測がつきません。</div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br><br>int main() {<br>    /* 要素数10の配列arrayを宣言する */<br>    int array[10];<br><br>    /* インデックスには負の値を指定してはいけない */<br>    a[-5] = -10;<br><br>    /* 要素数を超えた値を指定してもいけない */<br>    a[15] = 53;<br><br>    return 0;<br>}<br></pre></div>
+
+<div>特に、array[10] などというように、配列の要素数と同じ数のインデックスを指定してしまうことは頻繁に起きるミスです。
+配列の正しいインデックスは 0 〜 (要素数 - 1) であることに十分注意してください。
+<br><br></div>
+
+<div>別な例も示しましょう。<br></div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br><br>int main() {<br>    float a = 10.0;<br>    /* 要素数10の配列arrayを定義します */<br>    int b[10];<br>    double c = 100.0;<br><br>    printf("a = %f, c = %f\n", a, c);<br><br>    b[-1] = 50;<br>    b[15] = 25;<br><br>    printf("a = %f, c = %f\n", a, c);<br><br>    return 0;<br>}<br></pre></div>
+
+<div>あるコンピュータで実行したところ、次のような出力が得られました。<br></div>
+
+<div><pre class="result">a = 10.000000, c = 100.000000<br>a = 0.000000, c = 0.000000<br></pre></div>
+
+<div>変数 a と c の値が途中で 0.0 になっています。本来、変数 a と c には何も新しい値を代入していないので、初期値 10.0 と 100.0 のままであるはずです。このようなおかしなことが起こるのは、途中で配列の -1 番目の要素や 15 番目の要素に値を代入しているからです。<br></div>
+
+</blockquote>
+<h2>配列と文字列</h2>
+
+<blockquote>
+<div><a href="chap1.html">第 1 章</a>で、C言語のプログラム中では、<span class="cbox">"</span>（ダブルクオーテーション）で囲まれた文字の並びが文字列だと説明しました。実はC言語では、文字列は char 型の配列の一種です。これが何を意味するか、以下で詳しく見てゆきます。<br></div>
+
+<h3>文字の表現</h3>
+
+<div>コンピュータ内部では、文字は対応する文字コードの番号に直して計算されています。
+普通、この文字コードの番号を表す変数の型に char 型を用いるということは、<a href="chap2.html">第 2 章</a>で述べました。
+文字コードは色々ありますが、一般的な文字コードの表を下に示します。
+
+<p></p><table summary="文字コード" border="1" cellpadding="2" cellspacing="0" frame="void"><tbody><tr></tr><tr><th><br></th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th>
+ </tr>
+ <tr>
+ <td>02</td><td><br></td><td>!</td><td>"</td><td>#</td><td>$</td><td>%</td><td>&amp;</td><td>'</td><td>(</td><td>)</td><td>*</td><td>+</td><td>,</td><td>-</td><td>.</td><td>/</td>
+ </tr>
+ <tr>
+ <td>03</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>:</td><td>;</td><td>&lt;</td><td>=</td><td>&gt;</td><td>?</td>
+ </tr>
+ <tr>
+ <td>04</td><td>@</td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td>I</td><td>J</td><td>K</td><td>L</td><td>M</td><td>N</td><td>O</td>
+ </tr>
+ <tr>
+ <td>05</td><td>P</td><td>Q</td><td>R</td><td>S</td><td>T</td><td>U</td><td>V</td><td>W</td><td>X</td><td>Y</td><td>Z</td><td>[</td><td>\</td><td>]</td><td>^</td><td>_</td>
+ </tr>
+ <tr>
+ <td>06</td><td>`</td><td>a</td><td>b</td><td>c</td><td>d</td><td>e</td><td>f</td><td>g</td><td>h</td><td>i</td><td>j</td><td>k</td><td>l</td><td>m</td><td>n</td><td>o</td>
+ </tr>
+ <tr>
+ <td>07</td><td>p</td><td>q</td><td>r</td><td>s</td><td>t</td><td>u</td><td>v</td><td>w</td><td>x</td><td>y</td><td>z</td><td>{</td><td>|</td><td>}</td><td>~</td><td><br></td></tr></tbody></table>
+
+
+<br>この表は 16 進数の表で、横方向の数字が 1 桁目で、縦方向の数字が 2 桁目です。たとえば A という文字の文字コードは 16 進数で 41 となります。 10 進数では 4 * 16 + 1 = 65 で 65 です。
+<br><br></div>
+
+<div>文字をダブルクオート <span class="cbox">"</span> ではなくシングルクオート <span class="cbox">'</span> で囲むと、文字列ではなく、その文字の文字コードの値を意味します。たとえば、以下のプログラムでは変数 c1、c2 と c3 の値は全て 65 です。表せる範囲が異なるものの、char 型も int 型も整数を表すのに使われます。<br></div>
+
+<div><pre class="code">char c1 = 65;<br>char c2 = 'A';<br>int  c3 = 'A';<br></pre></div>
+
+<div>文字コードの規則性をうまく利用すると、次のようにアルファベットを列挙するプログラムを書くことができます。</div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br><br>int main() {<br>    for (char c = 'A'; c &lt;= 'Z'; c = c + 1) {<br>        printf("%c", c);<br>    }<br>    printf("\n");<br>    return 0;<br>}<br></pre></div>
+
+<div>A から Z の文字コードの番号は 65 から順に並んでいるので、変数 c の値を 65 から 1 ずつ増やしていくと、A、B、C、... の文字コードの番号に順に変わってゆきます。printf 関数の引数に使われているフォーマット指定子 %c は、引数として文字コードの番号（char 型）を受け取り、その番号に対応する文字を表示しろ、という意味です。プログラムの実行結果は次のようになります。<br></div>
+
+<div><pre class="result">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br></pre></div>
+
+<div>もっとも文字コードが何であるかは、コンピュータシステムによって異なるので、上のプログラムのように、文字コードの番号の順番が連続していることを仮定してプログラムの書くのは、あまり賢明ではありません。将来、異なった文字コードが普及して、それまで動いていたプログラムが動かなくなるかもしれないからです。</div>
+
+<h3>文字列の表現</h3>
+
+<div>文字列は char 型の配列の一種だと先に述べましたが、その配列の中身は文字コードの番号です。例えば "Hi!" という文字列なら、0 番目の要素（配列の先頭要素は 0 番目です）の値は H の文字コードの番号 'H'、1 番目の要素は i の文字コードの番号、となります。また、文字列を値とする変数の型は char 型の配列です。<br></div>
+
+<div><pre class="code">char hello[] = "Hello!";<br></pre></div>
+
+<div>このように hello を宣言すると、hello は char 型の配列となります。配列の要素の値は 0 番目の要素から順に H、e、l、l、o、! の文字コードの番号となります。先に紹介した配列の宣言の仕方と異なりますが、文字列の場合は特別に上のように宣言することができます。同じプログラムになるように普通の書き方で書き直すと、次のようになります。<br></div>
+
+<div><pre class="code">char hello[7];<br>hello[0] = 'H';<br>hello[1] = 'e';<br>hello[2] = 'l';<br>hello[3] = 'l';<br>hello[4] = 'o';<br>hello[5] = '!';<br>hello[6] = '\0';    /* 文字列の最後を意味する文字 */<br></pre></div>
+
+<div>char 型の配列 hello を宣言し、各要素に値を代入しています。これまで printf 関数で文字列を表示してきましたが、あれは char 型の配列の内容を表示するという printf 関数の機能を利用していたのです。<br><br></div>
+
+<div>ところで char 型の配列の要素には、いつでも新しい値を代入することができますが、配列そのものに文字列をまとめて代入することはできません。= の右側に文字列を書くことができるのは、配列を宣言するときだけです。<br></div>
+
+<div><pre class="code">char hello[] = "Hello!";    /* OK */<br>hello[0] = 'h';             /* OK */<br><br>hello = "Aloha!";           /* Error */<br></pre></div>
+
+<h3>文字列の末尾を表す特殊文字</h3>
+
+<div>上で示した配列 hello は要素の数が 7 でした。"Hello!" という文字列は 6 文字なのに、なぜ 7 なのでしょうか。実は配列の中身が文字列である場合、その配列の最後の要素の値は必ずヌル文字 (null 文字）という特別な文字（の文字コードの番号）であることになっています。
+ヌル文字の分も含めると、要素の数は 7 でなければならないのです。ヌル文字は終端文字と呼ばれることもあります。対応する文字コードの番号は 0 です。'\0' と書くと、ヌル文字の文字コードの番号を意味します。<br><br></div>
+
+<div>printf のような関数は、ヌル文字をもって文字列の末尾と見なすので、ヌル文字の存在は重要です。配列の途中の要素がヌル文字だと、先頭からそこまでが文字列で、ヌル文字以降はないものとして扱われます。例えば次のプログラムを見てください。<br></div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br><br>int main() {<br>    char hello[] = "Hello, World!";    /* 13 文字 */<br><br>    printf("hello[] = %s\n", hello);<br><br>    hello[6] = '\0'; /* カンマの後ろで文字列を終わりにする */<br><br>    printf("hello[] = %s\n", hello);<br><br>    hello[6] = '_'; /* カンマの後ろに _ を代入して文字列を復活させる */<br><br>    printf("hello[] = %s\n", hello);<br><br>    return 0;<br>}<br></pre></div>
+
+<div>途中で hello[6] にヌル文字（の文字コードの番号）を代入しています。これにより、続く行の printf 関数は ヌル文字以降の文字列の後ろ半分を表示しなくなってしまいます。フォーマット指定子 %s は、引数として受け取った char 配列の中身を表示させます。表示されるのは配列の先頭要素からヌル文字の直前までです。またプログラムでは、その後再び hello[6] に _ （アンダースコア文字）を代入しています。このため、その次の行の printf 関数は 0 から 12 文字目まで表示しています。hello[13] がヌル文字だからです。ややこしいのですが、配列 hello の要素の数は 14 で、0 から 12 番目の要素が各文字（全部で 13 文字）に対応して、13 番目がヌル文字です。配列の要素が 0 から始まることに注意してください。プログラムの実行結果を下に示します。<br></div>
+
+<div><pre class="result">hello[] = Hello, World!<br>hello[] = Hello,<br>hello[] = Hello,_World!<br></pre></div>
+
+<div style="text-align:center">
+<a href="06_string.png">
+<img class="fig" src="06_string.png"/></a>
+<p>（クリックで拡大）</p>
+</div>
+<h3>演習 6−2</h3>
+
+<div>配列 fox を宣言し、文字列 "The quick brown fox jumps over the lazy dog." を値としてください。さらにこの fox を使い、この文字列の中で o が先頭から何文字目に現れるか、すべて表示するようにしてください。プログラムを実行すると次のように出力すればよいでしょう。先頭の文字 T は、先頭から 0 番目と考えます。<br></div>
+
+<div><pre class="result">oはfox[12]にあります。<br>oはfox[17]にあります。<br>oはfox[26]にあります。<br>oはfox[41]にあります。<br></pre></div>
+
+<div>ヒント: 文字列の長さは 44 です。
+配列 fox の文字列の長さは strlen 関数でも計算できます。
+strlen(fox) の戻り値は配列 fox の文字列の長さです。
+</div>
+
+</blockquote>
+</div>
+
+<p><a href="index.html">目次</a></p>
+
+<p class="footnote"><br/>Copyright 2009-2011 the Compview project,
+Tokyo Institute of Technology.  All rights reserved.</p>
+</body></html>

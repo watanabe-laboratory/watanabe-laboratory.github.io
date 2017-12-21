@@ -1,0 +1,295 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="lecture.css">
+</head><body>
+
+<h1><span class="title">C言語入門</span><br />第 07 章　配列と文字列（続）</h1>
+
+<div class="frame">
+<h2>文字列操作の関数</h2>
+
+<blockquote>
+<p>文字列の操作はプログラム中でしばしば必要になりますが、配列を扱うプログラムをいちいち書いていては面倒です。そこで、C言語には文字列を操作するための便利な関数があらかじめ用意されています。</p>
+
+<div><table summary="文字列操作の関数" border="1" cellpadding="4" cellspacing="0" frame="void"><tbody><tr><th>関数名</th><th>操作内容</th>
+  </tr>
+  <tr>
+    <td>strcpy(x, y)</td><td>文字列 y の内容を、文字列 x にコピーする</td>
+  </tr>
+  <tr>
+    <td>strcat(x, y)</td><td>文字列 x の内容に文字列 y の内容を追加したものを、文字列 x に保存する</td>
+  </tr>
+  <tr>
+    <td>strlen(x)</td><td>文字列 x の長さ（先頭からヌル文字までの文字数）を計算する</td>
+  </tr>
+  <tr>
+    <td>strncpy(x, y, n)</td><td>文字列 y の先頭 n 文字分を、文字列 x に保存する</td>
+  </tr>
+  <tr>
+    <td>strncat(x, y, n)</td><td>文字列 x の内容に文字列 y の先頭 n 文字分を追加したものを、文字列 x に保存する</td></tr></tbody></table></div>
+
+<p>第 3 章で紹介した<a href="/quotes/?c=2&amp;p=4#197">数値計算のためのライブラリ関数</a>を使うときには、プログラムの冒頭に次のように書く必要がありました。</p>
+
+<div><pre class="code">#include &lt;math.h&gt;<br></pre></div>
+
+<div>一方、本章で紹介した文字列操作の関数を使うときは、冒頭に以下のように書く必要があります。</div>
+
+<div><pre class="code">#include &lt;string.h&gt;<br></pre></div>
+
+<div>例として、「Hello」「, 」「World」「.」というの4つの文字列を結合して、「Hello, World.」と表示するプログラムを以下に示します。
+</div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br>#include &lt;string.h&gt;<br><br>int main() {<br>    /* 文字列操作のために十分な長さをとる */<br>    char message[256]; <br><br>    /* 先頭をヌル文字にして長さ0の文字列にする */<br>    message[0] = '\0';<br>    printf("message[] = %s\n", message);<br>    printf("message len = %d\n", strlen(message));<br><br>    /* Helloをコピーする */<br>    strcpy(message, "Hello");<br>    printf("message[] = %s\n", message);<br>    printf("message len = %d\n", strlen(message));<br><br>    /* , を追加する */<br>    strcat(message, ", ");<br>    printf("message[] = %s\n", message);<br>    printf("message len = %d\n", strlen(message));<br><br>    /* Worldを追加する */<br>    strcat(message, "World");<br>    printf("message[] = %s\n", message);<br>    printf("message len = %d\n", strlen(message));<br><br>    /* .を追加する */<br>    strcat(message, ".");<br>    printf("message[] = %s\n", message);<br>    printf("message len = %d\n", strlen(message));<br><br>    return 0;<br>}<br></pre></div>
+
+<div>実行結果は次のようになります。<br></div>
+
+<div><pre class="result">message[] =<br>message len = 0<br>message[] = Hello<br>message len = 5<br>message[] = Hello,<br>message len = 7<br>message[] = Hello, World<br>message len = 12<br>message[] = Hello, World.<br>message len = 13<br></pre></div>
+
+<div>
+このプログラムの計算結果である「Hello, World.」という文字列は配列 message に保存されます。この配列の大きさ（要素数）は 256 というかなり大きな数です。これは文字列操作の過程で、値が代入される配列の要素のインデックスが、最初に宣言した要素数を超えないようにする配慮です。超えてしまうと、計算結果が誤ったものになる可能性がでます。本章で紹介した文字列操作関数は、計算結果を保存する配列が十分大きいか確認しません。このため今回は、扱う文字列にたいして十分な大きさの配列を用意することで、この問題に対処しています。あまり良い方法でありませんが、簡単なプログラムでは許されるでしょう。</div>
+
+</blockquote>
+<h2>多次元配列</h2>
+
+<blockquote>
+<div>配列についてもう少し考えてみましょう。int a[5] という配列は 5 個の要素を持つ配列でした。これを拡張して、たとえば 2 × 5 の要素を持つ配列を利用することもできます。2 × 5 の配列を宣言するには、以下のようにカギ括弧 [ ] で括られた要素数もう 1 つを後ろに追加するだけです。このような配列を 2 次元配列といいます。一般に 1 次元より大きな配列を<span class="word">多次元配列</span>と呼びます。</div>
+
+<div><pre class="code">int a[5];     /* 1 x 5 の配列 */<br>int b[2][5];  /* 2 x 5 の配列 */<br></pre></div>
+
+<div>1 次元の配列 a は、1 x 5 の 2 次元配列と見なすこともできます。2 × 5 の配列 b の各要素の値は、1 次元配列と同じく [ ] の間にインデックスを書くことで参照したり代入したりすることができます。1 次元配列と同じくインデックスの値は 0 から (要素数 - 1) の間の値ですので、注意してください。
+</div>
+
+<div><pre class="code">b[0][0] = 1;<br>b[0][1] = 2;<br>b[0][2] = 3;<br>b[0][3] = 4;<br>b[0][4] = 5;<br>b[1][0] = 6;<br>b[1][1] = 7;<br>b[1][2] = 8;<br>b[1][3] = 9;<br>b[1][4] = 10;<br></pre></div>
+
+<div>配列 b のインデックスは 1 つ目が 0 から 1、2 つ目が 0&nbsp; から 4 の間です。配列の次元数はいくつでも増やせるので 3 次元配列や 4 次元配列も宣言できます。しかし実際によく使われるのは 3 次元配列ぐらいまででしょうか。<br></div>
+
+<h3>演習 7−1</h3>
+
+<div>3 × 3 の 2 次元配列を宣言し、その配列が魔方陣となるように数値を配置して結果を表示するプログラムを作成してください。また、その実行結果も示してください。
+</div>
+
+<div>
+<p>
+魔方陣とは正方形の方陣に数字を配置し、縦・横・斜めのいずれの列についても、その列の数字の合計が同じになるもののことです。特に 1 から方陣のマスの総数（3 × 3 の場合は 9）までの数字を 1 つずつ過不足なく使ったものを呼びます。詳しくは、<a href="http://ja.wikipedia.org/wiki/%E9%AD%94%E6%96%B9%E9%99%A3" target="_blank">こちら</a>を参照してください。なお、要素数が奇数の魔方陣は以下の規則で作成できることが知られています。 <br></p><ol><li>1 行目 2 列目 (中央) を 1 とする</li><li>右上に次の数字を置いていく(最上段の上は最下段になる) </li><li>右上が埋まっていたら一つ下に次の数字を置く </li><li>再び右上へと数字を埋めていく</li><li>2〜4 を縦の要素数分繰り返す</li></ol></div>
+
+<div>ヒントとしてプログラムの一部を以下に示しますので、<span class="input">__(1)__</span> 〜 <span class="input">__(3)__</span> の部分を埋めることでプログラムを完成させてください。</div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br><br>int main() {<br>    int a[3][3];<br><br>    int val = 1;<br>    int i, j;<br>    for (i = 0; i &lt; 3; i = i + 1) {<br>        for (j = 0; j &lt; 3; j = j + 1) {<br>            a[<span class="input">__(1)__</span>][<span  class="input">__(2)__</span>] = val;<br>            val = val + 1;<br>        }<br>    }<br><br>    for (i = 0; i &lt; 3; i = i + 1) {<br>        for (j = 0; j &lt; 3; j = j + 1) {<br>	    printf("%d ", <span class="input">__(3)__</span>);<br>        }<br>        printf("\n");<br>    }<br><br>    return 0;<br>}</pre></div>
+
+</blockquote>
+<h2>配列と関数</h2>
+
+<blockquote>
+<h3>2 x 2 の行列</h3>
+
+<p>
+多次元配列のもうひとつの応用例として、2 × 2の行列の四則演算をしてみましょう。2 × 2の行列は 2 次元の配列を使って表現することができます。たとえば、下の２つの行列 A、B:</p>
+
+<div style="text-align:center">
+<a href="07_eq01.png">
+<img class="fig" src="07_eq01.png"/></a>
+<p>行列Ａ</p>
+</div>
+<div style="text-align:center">
+<a href="07_eq02.png">
+<img class="fig" src="07_eq02.png"/></a>
+<p>行列Ｂ</p>
+</div>
+<p>は、それぞれ次のようなプログラムで表現することができます。</p>
+
+<div><pre class="code">int a[2][2];<br>a[0][0] = 1;<br>a[0][1] = 2;<br>a[1][0] = 3;<br>a[1][1] = 4;<br><br>int b[2][2];<br>b[0][0] = 5;<br>b[0][1] = 6;<br>b[1][0] = 7;<br>b[1][1] = 8;<br></pre></div>
+
+<div>しかし、このような書き方では変数名が長い場合や要素の数が多い場合、プログラムが冗長になってしまいます。そこでC言語ではこのような配列の初期化を簡潔に書けるようにするため、以下のような方法も用意されています。ただし、この書き方ではカンマを書き忘れたり、要素の場所を間違ってしまわないように注意が必要です。<br></div>
+
+<div><pre>int a[][] = {{1, 2}, <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {3, 4}};<br>int b[][] = {{5, 6}, <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {7, 8}};</pre></div>
+
+<div>実は、このような配列の初期化は、1 次元の配列でも利用できます。<br></div>
+
+<div><pre>int c[] = {0, 1, 4, 9, 16, 25, 36};</pre></div>
+
+<h3>配列を引数にとる関数</h3>
+
+<div>本章の冒頭では、文字列を操作する関数を紹介しました。一方、前章で説明したとおり文字列は文字（文字コード）の配列として表現されています。したがって、このような文字列を操作する関数は引数として配列を受け取る関数ということになります。今までの関数の引数は int 型のような数値だけでした。しかし、このように引数として配列を受け取ることもできます。配列を引数として受け取る関数を作成することで、配列に対する処理を関数にすることができます。たとえば、int 型の配列の全要素を表示するプログラムを今まで何度も紹介してきました。これを以下のような関数にすることで、プログラムを簡潔にすることができます。</div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br><br>/* int型の配列の全要素を表示する関数 */<br>void print_int_array(int array[], int n) {<br>    for (int i = 0; i &lt; n; i = i + 1) {<br>        printf("%d ", array[i]);<br>    }<br>    printf("\n");<br>}<br><br>int main() {<br>    int a[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};<br>    print_int_array(a, 10);<br><br>    int b[] = {-1, 1, -1, 1, -1, 1, -1, 1, -1, 1};<br><br>    print_int_array(b, 10);<br><br>    for (int i = 0; i &lt; 10; i = i + 1) {<br>        a[i] = a[i] * b[i];<br>    }<br>    <br>    print_int_array(a, 10);<br><br>    return 0;<br>}<br></pre></div>
+
+<div>print_int_array 関数の第 1 引数 array は配列です。配列が引数の場合、<code>int array[]</code> のように書きます。[ ] 内に配列の要素数は書きません。逆に言うと、要素数がいくつの配列であっても引数として print_int_array 関数に渡せます。要素数は第 2 引数 n として print_int_array 関数に渡します。上のプログラムの実行結果は次のようになります。</div>
+
+<div><pre class="result">1 2 3 4 5 6 7 8 9 10<br>-1 1 -1 1 -1 1 -1 1 -1 1<br>-1 2 -3 4 -5 6 -7 8 -9 10<br></pre></div>
+
+<div>配列を関数の引数として渡せば、関数の中でその配列の各要素の値を変更することもできます。たとえば、配列のすべての要素を 0 に初期化する関数は以下のように書くことができます。
+</div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br><br>/* int型の配列の全要素を表示する関数 */<br>void print_int_array(int array[], int n) {<br>    for (int i = 0; i &lt; n; i = i + 1) {<br>        printf("%d ", array[i]);<br>    }<br>    printf("\n");<br>}<br><br>/* 配列の全要素を0にする関数 */<br>void zero_array(int array[], int n) {<br>    for (int i = 0; i &lt; n; i = i + 1) {<br>        array[i] = 0;<br>    }<br>}<br><br>int main() {<br>    int a[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};<br>    print_int_array(a, 10);<br><br>    zero_array(a, 10);<br><br>    print_int_array(a, 10);<br><br>    return 0;<br>}<br></pre></div>
+
+<div>実行結果は次のようになります。<br></div>
+
+<div><pre class="result">1 2 3 4 5 6 7 8 9 10<br>0 0 0 0 0 0 0 0 0 0<br></pre></div>
+
+<div>多次元配列を関数の引数にする場合は、配列の宣言時と同じく引数の名前の後ろに [  ] を続けます。たとえば 3 次元配列を引数としてとる関数は以下のように書きます。</div>
+
+<div><pre class="code">/* int型の3次元配列の全要素を0にする関数 */<br>void print_int_array3D(int array[3][3][3]) {<br>    for (int i = 0; i &lt; 3; i = i + 1) {<br>        for (int j = 0; j &lt; 3; j = j + 1) {<br>            for (int k = 0; k &lt; 3; k = k + 1) {<br>                ....<br>            }<br>        }<br>    }<br>}<br></pre></div>
+
+<h3>配列は関数の戻り値にできない？</h3>
+
+<div>これまで関数で計算した結果は関数の戻り値にしていました。たとえば足し算をおこなう関数を作成したとすると次のようになります。
+</div>
+
+<div><pre class="code">int add(int x, int y) {<br>  return x + y;<br>}<br></pre></div>
+
+<div>しかし冒頭で紹介した文字列操作関数、たとえば strcat(x, y) は、計算結果を戻り値として返さず、引数で渡された配列に代入することで返します。<strong>引数で渡した配列の内容が変更される</strong>のです。<br><br></div>
+
+<div>実は配列を関数の戻り値とすることはできません。正確にはできないわけではありませんが、特別な配慮が必要です。例えば次のような関数は、配列を戻り値にしていますが、コンパイルするとエラーになります。</div>
+
+<div><pre class="code">/* [注意!] この関数はコンパイルできません */<br>float[] sqrtArray()  {<br>    float array[100];<br><br>    for (int index = 0; index &lt; 100; index = index + 1) {<br>        array[index] = sqrt(index);<br>    }<br><br>    return array;<br>}<br></pre></div>
+
+<div>
+
+<p>
+以上の内容をまとめると以下のとおりです。
+</p>
+
+<ul><li>配列を関数の戻り値にすることは（簡単には）できない</li><li>関数で配列を操作したい場合、配列を引数で渡し、配列の要素を直接変更する</li></ul></div>
+
+<h3>演習 7−2</h3>
+
+<div>
+<p>2 次元配列を 1 つ引数にとり、その配列の全要素を表示する関数 printMatrix を作成してください。さらに、作成した関数を使って以下の 2 × 2 の行列を表示してください。
+</p></div>
+
+<div style="text-align:center">
+<a href="07_eq03.png">
+<img class="fig" src="07_eq03.png"/></a>
+<p>2 x 2 行列</p>
+</div>
+<div>
+printMatrix() 関数の宣言部は以下のようになります</div>
+
+<div><pre class="code">/* 2次元配列の全要素を表示する関数 */<br>void printMatrix(int array[2][2]) {<br>    ....<br>}<br></pre></div>
+
+<h3>2 次元の行列演算</h3>
+
+<div>
+
+<p>上の演習で作成した printMatrix 関数を使うと、2 次元行列を簡単に表示できるようになりました。
+これを利用して、いよいよ実際に行列演算を行います。まずはもっとも簡単な行列の加算をおこなう関数を作成します。行列の加算は、各要素をそれぞれ足すだけでよいため、以下のような関数で実現できます。
+</p></div>
+
+<div><pre class="code">/* arrayA に arrayB の全要素を加算する関数 */<br>void addMatrix(int arrayA[2][2], int arrayB[2][2]) {<br>    arrayA[0][0] = arrayA[0][0] + arrayB[0][0];<br>    arrayA[0][1] = arrayA[0][1] + arrayB[0][1];<br>    arrayA[1][0] = arrayA[1][0] + arrayB[1][0];<br>    arrayA[1][1] = arrayA[1][1] + arrayB[1][1];<br>}<br></pre></div>
+
+<div>実際に addMatrix 関数を呼び出して動作を確認してみます。</div>
+
+<div><pre class="code">#include &lt;stdio.h&gt;<br><br>/* arrayAにarrayBの全要素を加算する関数 */<br>void addMatrix(int arrayA[2][2], int arrayB[2][2]) {<br>    arrayA[0][0] = arrayA[0][0] + arrayB[0][0];<br>    arrayA[0][1] = arrayA[0][1] + arrayB[0][1];<br>    arrayA[1][0] = arrayA[1][0] + arrayB[1][0];<br>    arrayA[1][1] = arrayA[1][1] + arrayB[1][1];<br>}<br><br>/* 2次元配列の全要素を表示する関数 */<br>void printMatrix(int array[2][2]) {<br>    ....<br>}<br><br>int main() {<br>    int matrixA[2][2] = {{1, 2},<br>                         {3, 4}};<br>    int matrixB[2][2] = {{5, 6},<br>                         {7, 8}};<br><br>    printMatrix(matrixA);<br>    printf("  +  \n");<br>    printMatrix(matrixB);<br>    printf("  =  \n");<br>    addMatrix(matrixA, matrixB);<br>    printMatrix(matrixA);<br><br>    return 0;<br>}<br></pre></div>
+
+<div>実行結果は以下のようになります。<br></div>
+
+<div><pre class="result">1 2<br>3 4<br>  +<br>5 6<br>7 8<br>  =<br>6 8<br>10 12<br></pre></div>
+
+<h3>演習 7−3</h3>
+
+<div><a href="/quotes/?c=2&amp;p=8#531">上で示した addMatrix 関数</a>を for 文を使って書き直してください。こうすることで将来 2 × 2 行列以外の行列を計算する必要がでてきた場合に、簡単な変更ですむようになります。</div>
+
+<h3>演習 7−4</h3>
+
+<div><p>
+演習 7−3 で書き直した addMatrix() 関数を参考にして、以下の関数を作成してください。
+</p>
+
+<ul>
+
+<li>行列の減算をする関数 subMatrix(int matrixA[2][2], int matrixB[2][2]) </li>
+<li>行列の乗算をする関数 mulMatrix(int matrixA[2][2], int matrixB[2][2]) </li>
+</ul>
+
+<p>
+作成した関数を使い、（先に示したプログラムの）行列 matrixA と matrixB:</p>
+<pre>int matrixA[2][2] = {{1, 2}, {3, 4}};<br> int matrixB[2][2] = {{5, 6}, {7, 8}};<br></pre>
+<p>について減算、乗算した結果を表示してください。表示した結果は以下のようになります。
+</p></div>
+
+<div><pre class="result">1 2<br>3 4<br>  -<br>5 6<br>7 8<br>  =<br>-4 -4<br>-4 -4<br><br>1 2<br>3 4<br>  *<br>5 6<br>7 8<br>  =<br>19 22<br>43 50<br></pre></div>
+
+</blockquote>
+<h2>最短経路問題</h2>
+
+<blockquote>
+<div>最後に配列の応用として<span class="word">最短経路問題</span>とその解法を説明します。
+</div>
+
+<h3>最短経路問題とは？</h3>
+
+<div><span class="word">最短経路問題</span>には何個かのバリエーションがありますが、今ここでは<span class="word">単一始点最短経路問題</span>といわれる、任意の目的地 A から他のすべての目的地に到達する最短の経路を求める問題を取り上げます。この問題では、目的地 n 箇所とそれぞれの目的地の間の距離は予め与えられているものとします。ネット上にさまざまなサービスが展開されている鉄道の乗り換え案内や、カーナビ内のソフトウェアといった形で、日常生活でも頻繁に発生する問題です。
+</div>
+
+<h3>ダイクストラ法とは？</h3>
+
+<p>この最短経路問題の解法としては、以下に説明する<span class="word">ダイクストラ法</span>が良く知られています。これは最短経路が未確定の目的地のうち、暫定距離が最小の地点は、暫定距離を最小にする経路が出発点からの最短経路になるという性質を利用します。暫定の距離とは「出発点〜最短経路が決定した目的地のいずれか〜対象の目的地」までの経路のうち、最短のものです。例えば今、A、B、C、D、E の 5 地点があり、出発点 A から各地点への最短経路を求めるとします。
+</p>
+
+<p>まず出発点 A に隣接する地点のうち、A から最短の地点を探すと、これは C です。これから C までの最短経路は A-C と決まり、距離は 10 となります。図ではノードが地点で、エッジのそばの数字が地点間の距離です。</p>
+
+<div style="text-align:center">
+<a href="07_dijkstra-1.png">
+<img class="fig" src="07_dijkstra-1.png"/></a>
+<p>C への最短経路が確定</p>
+</div>
+<div>次に最短経路が確定した地点 A（最短経路の距離は当然 0 です）と C から各地点への暫定距離を計算します。A または C から（他の地点を経由しないで）直接到達できない地点の暫定距離は無限大とします。すると無限大でないのは B と E です。B への経路は A-B または A-C-B ですが、距離が短いのは A-C-B の 18 の方なので、これを B の暫定距離とします。同様に E の暫定距離は A-E の 25 です。暫定距離を計算したら、暫定距離が最小の地点を選びます。この地点の最短経路は、暫定距離を最小にする経路です。したがって地点 B が選ばれ、A から B への最短経路は A-C-B が決まります。<br></div>
+
+<div style="text-align:center">
+<a href="07_dijkstra-2.png">
+<img class="fig" src="07_dijkstra-2.png"/></a>
+<p>B への最短経路が確定</p>
+</div>
+<div>最短経路が確定した地点は A、B、C となりました。再び最短経路がまだ確定していない地点への暫定距離を計算します。確定した地点に B が加わったので、D の暫定距離が無限大から 31 に変わります。31 となる経路は A-B-D です。前回同様、暫定距離が最小のものを選びます。今回は E ですので、E の最短経路は A-E でその距離は 25 となります。<br></div>
+
+<div style="text-align:center">
+<a href="07_dijkstra-3.png">
+<img class="fig" src="07_dijkstra-3.png"/></a>
+<p>E への最短経路が確定</p>
+</div>
+<p>再び、最短経路がまだ確定していない地点への暫定距離を計算しますが、残ったのは D だけです。最短経路が確定した A、B、C、E から D へ到達する経路は A-B-D と A-E-D の 2 種類ですが、最小のものは A-B-D の 31 の方なので、暫定距離は前回と変わりません。次に暫定距離のうち最小のものを選びますが、今回は 1 つしかないので、D が選ばれ、最短経路が A-B-D と確定します。これで全ての地点について最短経路が決まりました。</p>
+
+<div style="text-align:center">
+<a href="07_dijkstra.png">
+<img class="fig" src="07_dijkstra.png"/></a>
+<p>D への最短経路が確定</p>
+</div>
+<div>ダイクストラ法をプログラムで実現するには、例えば以下のような配列を用意すればよいでしょう。
+
+<ul><li>各地点間の距離を記録した 2 次元配列</li><li>各地点の最短経路が確定したかどうかを記録する 1 次元配列（0 なら未確定、1 なら確定）<br></li><li>各地点への暫定距離（または最短経路が確定していればその距離）を記録する 1 次元配列</li><li>各地点への最短経路で、その地点の一つ前の地点を記録した 1 次元配列</li></ul>
+
+
+各地点に 0 から始まる通し番号をふり、それを配列のインデックスに使います。例えば 2 番目と 4 番目の地点の間の距離は配列 weight[2][4] に記録します。また 3 番目の地点の暫定距離は配列 distance[3] に記録します。最短経路が確定している地点の場合は、配列 distance の要素の値は暫定距離ではなく最短経路の距離となります。<br></div>
+
+<h3>演習 7−5</h3>
+
+<div><p>
+ダイクストラ法を使って最短経路問題を解くプログラムを作成してください。地点の数や地点間の距離は上の説明と同じものを使ってください。地点 A が出発点です。各地点は次のように番号をふることとします。<br>
+</p>
+
+<ul><li>A ⇒ 0</li><li>B ⇒ 1</li><li>C ⇒ 2</li><li>D ⇒ 3</li><li>E ⇒ 4</li></ul>
+
+<p>
+プログラムの出力結果は以下のようになるようにしてください。右から順に「目的名」「最短距離」「最短距離での経路」となります。
+</p></div>
+
+<div><pre class="result">1:  18(1 =&gt; 2 =&gt; 0)<br>2:  10(2 =&gt; 0)<br>3:  31(3 =&gt; 1 =&gt; 2 =&gt; 0)<br>4:  25(4 =&gt; 0)<br></pre></div>
+
+</blockquote>
+<h2>まとめ</h2>
+
+<blockquote>
+<div><p>
+本章では前章で説明した配列と文字列について応用部分を説明しました。具体的には以下のとおりです。
+</p>
+
+<ul><li>文字列を操作する関数の使い方</li><li>行列を表現するために利用する多次元配列</li><li>配列を引数にとる関数の定義方法</li></ul></div>
+
+</blockquote>
+</div>
+
+<p><a href="index.html">目次</a></p>
+
+<p class="footnote"><br/>Copyright 2009-2011 the Compview project,
+Tokyo Institute of Technology.  All rights reserved.</p>
+</body></html>
