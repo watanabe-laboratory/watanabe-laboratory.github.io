@@ -1,0 +1,94 @@
+<HTML>
+<HEAD><TITLE>Web Teidan: Ref Index</TITLE></HEAD>
+<BODY BGCOLOR="#CCCCCC">
+
+<TABLE WIDTH="100%" BORDER="0">
+<TR BGCOLOR="#FFFFFF"><TD>
+<CENTER>
+<BR>
+<H2>Web 鼎談：コンピュータ・サイエンスは２１世紀の基礎科学になるか？</H2>
+</CENTER>
+</TD></TR>
+</TABLE>
+<CENTER>
+<H2>参考文献リスト</H2>
+</CENTER>
+
+<P>
+<A HREF="../index.html">鼎談の表紙</A>へ，
+<A HREF="../outline.html">鼎談のあらすじ</A>へ，
+<A HREF="../4.html">鼎談総集編の最初</A>へ
+</P>
+
+<HR>
+
+<P>
+関連する文献やリンクを集めてみました．
+</P>
+
+<P>
+<UL>
+<LI>ＣＳ全般：
+<OL>
+<LI><B>ファインマン計算機科学</B>，
+R. Feynman 講義，A. Hey, R. Alen 編，原，中山，松田訳，岩波書店 1999．
+<LI><B>計算理論の基礎</B>（近刊です），
+M. Sipser 著，大田，渡辺監訳，共立出版，2000．
+</OL>
+
+<BR>
+<LI>ＣＳの各分野について：
+<OL>
+<LI><B>アルゴリズムの設計と解析Ｉ，ＩＩ</B>
+（アルゴリズムについてのスタンダードな入門書），
+A.V. Aho, J.E. Hopcroft, J.D. Ullman 著，
+野崎，野下監訳，サイエンス社，1977．
+<LI><B>計算とアルゴリズム</B>
+（アルゴリズムについてのお勧めな近刊），
+浅野孝夫，今井浩，オーム社，2000．
+<LI><A HREF="http://www.learningtheory.org/">
+計算論的学習理論のホームページ</A>
+<LI><B>情報セキュリティの科学</B>
+（セキュリティ技術への招待），
+太田和夫，黒澤馨，渡辺治著，講談社ブルーバックス，1995．
+<LI><B>コンピュータの数学</B>
+（ＣＳ理論ではこんな数学が必要です），
+R.L. Graham, D.E. Knuth, O. Patashnik 著，
+有澤，安村，萩野，石畑訳，共立出版，1993．
+</OL>
+
+<BR>
+<LI>教育に関して
+<OL>
+<LI>
+<A HREF="http://www.is.titech.ac.jp/~watanabe/class/cs-intro/">東工大のＣＳ入門授業の一例</A>（理学部向けの講義の一例です）
+<LI>
+東工大で行っている高校生対象の
+<A HREF="http://www.cc.titech.ac.jp/supcon99-j/index.html">スーパーコンピュータコンテスト</A>
+</OL>
+
+<BR>
+<LI>
+ＣＳ周辺の話題：
+<OL>
+<LI>
+Computing The Future
+（米国のコンピュータ関連の研究に関する政策を議論した本），
+By Computer Science and Telecommunications Board,
+National Research Council, National Academy Press, 1992
+(ISBN 0-309-0470-4).
+<LI>
+上記の本に関する
+<A HREF="http://www.eccc.uni-trier.de/eccc/info/actual.html">
+ＣＳ理論人たちの議論</A>
+<LI>
+第三の理（言わずと知れた根上師の数学小説），
+根上生也著，日本評論社．
+<LI>
+ゲーデル・エッシャー・バッハ，
+D. Hochstadter 著，野崎，はやし，柳瀬訳，白揚社，1985．
+</UL>
+</P>
+
+</BODY>
+</HTML>

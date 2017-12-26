@@ -1,0 +1,360 @@
+body {
+	margin: 0px; padding: 0px 36px; line-height: 140%; font-family: "Arial", sans-serif; font-size: 90%; -ms-word-break: break-all;
+}
+img {
+	border: 0px currentColor; border-image: none; max-width: 100%;
+}
+ul {
+	line-height: 130%;
+}
+p {
+	margin: 0px; padding: 0px;
+}
+div.container {
+	margin: 0px; padding: 0px; border: 1px solid currentColor; border-image: none; width: 100%;
+}
+div.logo {
+	margin: 0px; padding: 0px; width: 100%; float: left;
+}
+div.logo img {
+	margin: 0px 16px 0px 0px; padding: 0px; width: auto; float: left;
+}
+div.logo span.logo_text {
+	padding: 16px; width: auto; font-size: 36px; float: left;
+}
+div.logo h1 {
+	margin: 0px; padding: 8px; width: auto; font-size: 24px; vertical-align: middle;
+}
+div.logo p {
+	margin: 0px; padding: 0px;
+}
+div.logo div.page_funcbar {
+	width: auto; padding-right: 4px; float: right;
+}
+div.navigationbar {
+	margin: 0px; padding: 0px; width: 100%; clear: both;
+}
+div.topicpath {
+	margin: 0px; width: auto; float: left;
+}
+div.navigator {
+	margin: 0px; width: auto; float: right;
+}
+div.navigator img {
+	width: auto; float: left;
+}
+div.editbar {
+	margin: 0px; padding: 0px; text-align: right; clear: both;
+}
+div.footer {
+	margin: 0px; padding: 0px; text-align: right; clear: both;
+}
+div.left {
+	margin: 8px 0px 0px; width: 23%; float: left;
+}
+div.menu {
+	margin: 0px; padding: 16px;
+}
+div.menu div {
+	margin-top: 4px;
+}
+div.menu form {
+	margin: 4px;
+}
+div.menu h2 {
+	margin: 0px; padding: 0px; text-align: center; font-family: "Arial", sans-serif; font-size: 110%; font-weight: bold; border-bottom-color: currentColor; border-bottom-width: 1px; border-bottom-style: dashed;
+}
+div.menu h3 {
+	margin: 0px; padding: 0px; text-align: center; font-size: 100%; font-weight: bold;
+}
+div.menu h4 {
+	margin: 0px; padding: 0px; text-align: center; font-size: 100%; font-weight: bold;
+}
+div.menu h5 {
+	margin: 0px; padding: 0px; text-align: center; font-size: 100%; font-weight: bold;
+}
+div.menu ul {
+	margin: 16px 0px; padding: 0px; list-style-type: none;
+}
+div.menu ul li {
+	margin: 0px 0px 1px; padding: 0px; text-align: left;
+}
+div.menu ul a {
+	margin: 0px; border: 1px solid currentColor; border-image: none; width: auto; padding-left: 1.4em; display: block; -ms-word-break: break-all;
+}
+div.menu #search {
+	margin: 0px; padding: 0px;
+}
+div.menu #search p {
+	margin: 8px; padding: 0px;
+}
+div.menu #search #search_word {
+	width: 60%;
+}
+div.menu #search #search_submit {
+	width: 30%;
+}
+div.menu div.jumpmenu {
+	display: none;
+}
+div.right {
+	margin: 0px; padding: 0px; width: 75%; border-left-color: rgb(204, 204, 204); border-left-width: 3px; border-left-style: solid; float: right;
+}
+div.body {
+	margin: 0px; padding: 16px 16px 16px 0px;
+}
+div.body div {
+	margin-left: 16px;
+}
+div.body p {
+	margin: 8px; padding: 8px;
+}
+div.body pre {
+	margin: 12px; padding: 8px; width: 94%; overflow: auto; font-family: Monospace;
+}
+div.body h2 {
+	margin: 0px 0px 8px; font-size: 100%;
+}
+div.body h3 {
+	margin: 0px 0px 8px 8px; font-size: 100%; font-weight: normal;
+}
+div.body h5 {
+	margin: 0px 0px 8px 8px; font-size: 100%; font-weight: normal;
+}
+div.body h4 {
+	margin: 0px 0px 8px 16px; font-size: 100%; font-weight: normal;
+}
+div.body .style_table {
+	margin: 16px; padding: 0px; text-align: left; font-size: 100%; border-collapse: collapse;
+}
+div.body td.style_td {
+	margin: 1px; padding: 2px; text-align: left;
+}
+div.body thead td.style_td {
+	
+}
+div.body blockquote {
+	margin: 12px; padding: 8px; width: 94%; overflow: auto;
+}
+div.body blockquote p {
+	margin: 0px; padding: 0px;
+}
+div.body div.related {
+	margin: 0px 8px; padding: 8px; font-size: 90%;
+}
+div.body div.notefoot {
+	margin: 0px 8px; padding: 8px; font-size: 90%;
+}
+div.body div.related p {
+	margin: 4px; padding: 0px;
+}
+div.body div.notefoot p {
+	margin: 4px; padding: 0px;
+}
+.super_index {
+	font-size: 60%; vertical-align: super;
+}
+a.note_super {
+	font-size: 60%; vertical-align: super;
+}
+div.body ul li {
+	margin: 2px 0px; line-height: 140%;
+}
+div.body ul.list1 {
+	list-style-type: disc;
+}
+div.body ul.list2 {
+	list-style-type: circle;
+}
+div.body ul.list3 {
+	list-style-type: square;
+}
+div.body ol.list1 {
+	list-style-type: decimal;
+}
+div.body ol.list2 {
+	list-style-type: lower-roman;
+}
+div.body ol.list3 {
+	list-style-type: lower-alpha;
+}
+div.body strong {
+	font-size: 90%; font-weight: bold;
+}
+div.ie5 {
+	
+}
+div.contents {
+	margin: 0px;
+}
+span.noexists {
+	
+}
+div.jumpmenu {
+	text-align: right; float: right; min-width: 10%;
+}
+hr.full_hr {
+	
+}
+hr.note_hr {
+	display: none;
+}
+span.size1 {
+	line-height: 130%; text-indent: 0px; font-size: xx-small; display: inline;
+}
+span.size2 {
+	line-height: 130%; text-indent: 0px; font-size: x-small; display: inline;
+}
+span.size3 {
+	line-height: 130%; text-indent: 0px; font-size: small; display: inline;
+}
+span.size4 {
+	line-height: 130%; text-indent: 0px; font-size: medium; display: inline;
+}
+span.size5 {
+	line-height: 130%; text-indent: 0px; font-size: large; display: inline;
+}
+span.size6 {
+	line-height: 130%; text-indent: 0px; font-size: x-large; display: inline;
+}
+span.size7 {
+	line-height: 130%; text-indent: 0px; font-size: xx-large; display: inline;
+}
+strong.word0 {
+	color: black; background-color: rgb(255, 255, 102);
+}
+strong.word1 {
+	color: black; background-color: rgb(160, 255, 255);
+}
+strong.word2 {
+	color: black; background-color: rgb(153, 255, 153);
+}
+strong.word3 {
+	color: black; background-color: rgb(255, 153, 153);
+}
+strong.word4 {
+	color: black; background-color: rgb(255, 102, 255);
+}
+strong.word5 {
+	color: white; background-color: rgb(136, 0, 0);
+}
+strong.word6 {
+	color: white; background-color: rgb(0, 170, 0);
+}
+strong.word7 {
+	color: white; background-color: rgb(136, 104, 0);
+}
+strong.word8 {
+	color: white; background-color: rgb(0, 70, 153);
+}
+strong.word9 {
+	color: white; background-color: rgb(153, 0, 153);
+}
+.edit_form {
+	
+}
+.edit_form textarea {
+	font-size: 90%;
+}
+.anchor {
+	
+}
+.anchor_super {
+	font-size: xx-small; vertical-align: super;
+}
+br.spacer {
+	
+}
+.style_calendar {
+	margin: 3px; padding: 0px; border: 0px currentColor; border-image: none; text-align: center; color: inherit; -ms-word-break: keep-all; background-color: rgb(204, 213, 221);
+}
+.style_td_caltop {
+	margin: 1px; padding: 4px; text-align: center; color: inherit; font-size: 80%; background-color: rgb(238, 245, 255);
+}
+.style_td_today {
+	margin: 1px; padding: 4px; text-align: center; color: inherit; background-color: rgb(255, 255, 221);
+}
+.style_td_sat {
+	margin: 1px; padding: 4px; text-align: center; color: inherit; background-color: rgb(221, 229, 255);
+}
+.style_td_sun {
+	margin: 1px; padding: 4px; text-align: center; color: inherit; background-color: rgb(255, 238, 238);
+}
+.style_td_blank {
+	margin: 1px; padding: 4px; text-align: center; color: inherit; background-color: rgb(238, 245, 255);
+}
+.style_td_day {
+	margin: 1px; padding: 4px; text-align: center; color: inherit; background-color: rgb(238, 245, 255);
+}
+.style_td_week {
+	margin: 1px; padding: 4px; text-align: center; color: inherit; font-size: 80%; font-weight: bold; background-color: rgb(221, 229, 238);
+}
+div.calendar_viewer {
+	color: inherit; padding-bottom: 10px; margin-top: 20px; margin-bottom: 10px; background-color: inherit;
+}
+span.calendar_viewer_left {
+	color: inherit; float: left; background-color: inherit;
+}
+span.calendar_viewer_right {
+	color: inherit; float: right; background-color: inherit;
+}
+.clear {
+	margin: 0px; clear: both;
+}
+div.counter {
+	font-size: 70%;
+}
+span.diff_added {
+	color: blue; background-color: inherit;
+}
+span.diff_removed {
+	color: red; background-color: inherit;
+}
+hr.short_line {
+	border-width: 1px 0px; border-style: solid; border-color: rgb(51, 51, 51); width: 80%; text-align: center;
+}
+h5.side_label {
+	text-align: center;
+}
+ul.navi {
+	margin: 0px; padding: 0px; text-align: center;
+}
+li.navi_none {
+	float: none; display: inline;
+}
+li.navi_left {
+	text-align: left; float: left; display: inline;
+}
+li.navi_right {
+	text-align: right; float: right; display: inline;
+}
+span.comment_date {
+	font-size: x-small;
+}
+span.new1 {
+	color: red; font-size: x-small; background-color: transparent;
+}
+span.new5 {
+	color: green; font-size: xx-small; background-color: transparent;
+}
+span.counter {
+	font-size: 70%;
+}
+ul.popular_list {
+	
+}
+ul.recent_list {
+	
+}
+div.img_margin {
+	margin-right: 32px; margin-left: 32px;
+}
+td.vote_label {
+	color: inherit; background-color: rgb(255, 204, 204);
+}
+td.vote_td1 {
+	color: inherit; background-color: rgb(221, 229, 255);
+}
+td.vote_td2 {
+	color: inherit; background-color: rgb(238, 245, 255);
+}

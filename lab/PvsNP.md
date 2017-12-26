@@ -14,7 +14,7 @@ title: Ｐ≠ＮＰ予想って何？
 6. [Ｐ≠ＮＰ予想の歴史とこれから](#history)
 7. [参考文献](#ref)
 
-## 1. ＮＰ問題とは？{#defNP}
+## 1. ＮＰ問題とは？ {#defNP}
 
 答えを言われれば「あっ，そうか」と思うけれども，それを見つけるとなると一苦労という問題が，我々の周囲には意外と多くある．
 
@@ -102,5 +102,5 @@ title: Ｐ≠ＮＰ予想って何？
 ## 7. 参考文献 {#ref}
 
 [1] M. Sipser, The history and status of the P versus NP question, In Proc. ACM STOC, pages, 603-618, 1992.  
-[2] 2014 年 3 月に発売した拙著「今度こそわかるＰ≠ＮＰ予想」（講談社）もよろしく．[本の紹介ページ](http://www.is.titech.ac.jp/~watanabe/pnpbook/)もご覧ください．
+[2] 2014 年 3 月に発売した拙著「今度こそわかるＰ≠ＮＰ予想」（講談社）もよろしく．[本の紹介ページ](http://tcs.c.titech.ac.jp/pnpbook/)もご覧ください．
 
