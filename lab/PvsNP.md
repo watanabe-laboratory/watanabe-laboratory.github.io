@@ -28,9 +28,7 @@ title: Ｐ≠ＮＰ予想って何？
 
 > **箱詰め問題**
 > 
-<div style="zoom:0.5"> ![](./PvsNPintro-jp.files/tile.png) </div>
-
-> 
+> ![](./PvsNPintro-jp.files/tile.png) {:zoom="0.5"}.
 > 与えられた板片を与えられた枠の中に詰め込む方法を求める問題．たとえば，上の図の左のような板を右の枠の中にすべて詰め込む置き方を示せ，という問題である．ちなみに，下図のような詰め込み方が上図の問題例に対する解答（の１つ）である．
 > 
 > ![](./PvsNPintro-jp.files/tile-ans.png)
