@@ -1,22 +1,22 @@
 # select.py
-# search the samples which are not consistent with the condition
+# select instances that are not consistent with the condition
 
 import sys
 data = []
-n = int(sys.argv[1])
+n = int(sys.argv[1])  # get the number of instances
 
 for i in range(n):
    d = input()
    data.append(d)
 
-pos = 0 # the number of the positive samples
-nn = 0 # the number of the samples which are not consistent with the condition
-np = 0 # the number of the positive samples which are not consistent with the condition 
+pos = 0
+nn = 0  
+np = 0  
 j = 0
 
 while j < n:
 	a = data[j]
-	cond = (a[4] == 't') # the condition
+	cond = (a[4] == 't')
 
 	if a[0] == 'p':
 		pos = pos + 1
@@ -26,7 +26,6 @@ while j < n:
 		nn = nn + 1
 		if a[0] == 'p':
 			np = np +1
-
 	j = j + 1
 
 # output
