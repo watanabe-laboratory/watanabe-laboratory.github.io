@@ -1,0 +1,71 @@
+@relation breastTumor-weka.filters.unsupervised.instance.Resample-S1-Z20.0-no-replacement
+
+@attribute age numeric
+@attribute menopause {premenopausal,>=40,<40}
+@attribute inv-nodes {0,2,3,1,7,10,16,5,8,6,4,25,9,17,15,13,14,11}
+@attribute node-caps {no,yes}
+@attribute deg-malig {1,3,2}
+@attribute breast {right,left}
+@attribute breast-quad {left-lower,right-lower,left-upper,right-upper,central}
+@attribute irradiation {no,yes}
+@attribute recurrence {n,r}
+@attribute class numeric
+
+@data
+54,>=40,1,no,3,left,right-upper,no,n,40
+51,>=40,0,no,3,left,right-upper,no,n,25
+48,premenopausal,1,no,2,left,left-lower,yes,n,45
+43,premenopausal,0,no,1,right,left-upper,no,n,12
+36,premenopausal,7,yes,2,right,left-upper,yes,n,25
+65,>=40,25,yes,3,left,left-lower,yes,r,20
+52,>=40,0,no,3,right,left-upper,no,n,40
+68,>=40,0,no,1,left,right-lower,no,n,15
+52,premenopausal,0,no,3,left,left-lower,no,n,30
+40,premenopausal,1,no,2,left,left-upper,yes,n,25
+56,>=40,8,no,3,left,left-lower,yes,r,25
+53,premenopausal,0,no,2,right,right-lower,no,n,25
+56,>=40,2,no,1,right,central,no,n,30
+65,>=40,1,no,2,left,left-upper,yes,n,15
+53,premenopausal,1,no,3,right,left-lower,yes,r,25
+60,>=40,0,no,2,left,left-upper,no,n,30
+33,<40,2,no,3,right,left-upper,no,n,15
+70,>=40,11,?,1,left,left-lower,yes,r,15
+33,premenopausal,2,no,3,left,central,no,n,20
+51,premenopausal,11,yes,2,right,left-upper,no,r,50
+55,<40,0,no,2,left,left-lower,no,n,15
+41,premenopausal,0,no,2,right,left-upper,no,n,20
+43,premenopausal,0,no,1,right,right-lower,no,n,10
+63,>=40,6,yes,3,left,left-upper,yes,r,13
+43,premenopausal,1,no,3,left,left-upper,no,r,28
+62,>=40,7,yes,3,left,central,no,n,45
+44,premenopausal,2,no,3,right,left-lower,yes,n,20
+69,>=40,1,no,3,right,left-upper,yes,r,30
+63,>=40,1,no,1,right,left-upper,no,r,20
+48,premenopausal,0,no,3,right,right-upper,no,n,30
+51,premenopausal,0,no,1,right,left-upper,no,r,25
+40,premenopausal,0,no,1,right,left-upper,no,n,40
+59,>=40,0,no,1,right,right-upper,no,n,50
+66,>=40,3,yes,2,left,central,yes,r,30
+46,>=40,0,no,2,right,left-upper,no,r,20
+63,>=40,1,no,3,right,left-upper,no,r,50
+73,>=40,0,no,1,left,right-lower,no,n,0
+65,>=40,2,no,3,right,left-lower,no,n,25
+53,premenopausal,0,no,2,left,left-lower,no,r,15
+55,>=40,1,no,1,left,right-lower,no,n,25
+53,<40,1,?,1,left,left-lower,no,r,20
+49,premenopausal,15,yes,3,left,left-lower,no,r,30
+36,premenopausal,1,no,1,right,left-upper,no,r,30
+50,>=40,0,no,2,right,right-upper,no,n,8
+44,premenopausal,0,no,2,left,left-upper,no,r,15
+47,premenopausal,0,no,2,right,left-lower,no,n,10
+63,>=40,0,no,2,right,left-lower,no,n,25
+41,premenopausal,0,no,3,left,right-upper,no,r,25
+42,premenopausal,0,no,1,right,left-lower,no,n,20
+46,premenopausal,3,yes,2,left,right-upper,no,r,30
+58,>=40,0,no,2,right,central,no,r,20
+57,premenopausal,8,yes,2,left,right-lower,yes,r,30
+39,premenopausal,7,yes,2,right,right-upper,no,n,30
+59,>=40,7,yes,2,left,left-lower,no,n,30
+62,>=40,0,no,2,right,left-lower,no,n,18
+49,premenopausal,4,yes,2,right,right-upper,yes,r,20
+59,>=40,0,no,1,left,left-upper,no,n,30

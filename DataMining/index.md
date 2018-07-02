@@ -12,3 +12,15 @@ This page is for downloading the necessary files of the course, **Introduction t
 - [test](./ex1/test.py)
 - [m8124org](./ex1/m8124org.txt) 
 - [mushroom_spec](./ex1/mushroom_spec.txt)
+
+
+### Exercise 4
+- [balance.scale](./ex4/balance.scale.arff)
+- [breastTumorR1-229](./ex4/breastTumorR1-229.arff)
+- [breastTumorR1-57](./ex4/breastTumorR1-57.arff)
+- [breastTumorR2-229](./ex4/breastTumorR2-229.arff)
+- [breastTumorR2-57](./ex4/breastTumorR2-57.arff)
+- [breastTumorR3-229](./ex4/breastTumorR3-229.arff)
+- [breastTumorR3-57](./ex4/breastTumorR3-57.arff)
+- [cmc](./ex4/cmc.arff)
+- [hepatitis](./ex4/hepatitis.arff)
