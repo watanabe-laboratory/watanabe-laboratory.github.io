@@ -24,3 +24,12 @@ This page is for downloading the necessary files of the course, **Introduction t
 - [breastTumorR3-57](./ex4/breastTumorR3-57.arff)
 - [cmc](./ex4/cmc.arff)
 - [hepatitis](./ex4/hepatitis.arff)
+
+### Exercise 5
+- [bmw](./ex5/bmw.arff)
+- [customers](./ex5/customers.arff)
+
+
+
+
+
