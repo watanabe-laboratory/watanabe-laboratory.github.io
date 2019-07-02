@@ -19,7 +19,7 @@ while j < n:
    a = data[j]
 
    ##### condition is given here #####
-   cond = (a[4] == 't') 
+   cond = (a[4] == 'f' and ) 
    ##### condition is given here #####
 
    if a[0] == 'p':
