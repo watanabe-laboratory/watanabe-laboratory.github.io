@@ -1,5 +1,7 @@
 * <span class="date">2020年4月14日</span>
 [Zoom 試行結果](https://tcs.c.titech.ac.jp/online2020/)
+* <span class="date">2020年3月7日</span>
+休校中の中高生の皆さんへの挑戦を作ってみました：[暗号解読に挑戦！](https://tcs.c.titech.ac.jp/cs/challenge.pdf)
 * <span class="date">2020年3月6日</span>
 Ruby を使うために，上記のインストールガイドよりも，もっとやさしい準備方法[Rubyお手軽準備](https://tcs.c.titech.ac.jp/cs/jyunbi.pdf)をアップしました。まずは，そちらを試してみて下さい。
 * <span class="date">2019年7月1日</span> 
