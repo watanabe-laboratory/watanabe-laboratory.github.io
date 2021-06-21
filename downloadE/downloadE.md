@@ -2,11 +2,10 @@ This is a download page for "Introduction to Computer Science" (presented at You
 
 For preparing your computer environment:
 
-   [install guide for Windows users](./installguideWin.pdf)
+   [installation guide for Windows users](./installationguideWin.pdf)
     
-   [install guide for Mac users](./installguideMac.pdf)
+   [installation guide for Mac users](./installationguideMac.pdf)
     
-   [install guide for Linux users](./installguideL.pdf)
 
 For exercise projects (sample programs):
 
